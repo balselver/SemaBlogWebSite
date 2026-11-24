@@ -1,0 +1,121 @@
+---
+// İletişim bölümü: doğrudan ulaşma yolları (form 4. aşamada eklenecek)
+import BolumBasligi from '../components/BolumBasligi.astro'
+import { iletisim } from '../data/iletisim'
+---
+
+<section id="iletisim" class="bolum bolum--beyaz" aria-labelledby="iletisim-baslik">
+  <div class="kapsayici iletisim">
+    <div>
+      <BolumBasligi
+        id="iletisim-baslik"
+        etiket="iletişim"
+        baslik="Sitenizi konuşalım"
+        aciklama="Teklif almak ücretsiz ve bağlayıcı değil. Size en kolay gelen yoldan yazın ya da arayın."
+      />
+
+      <div class="iletisim__butonlar">
+
+      </div>
+
+      <dl class="iletisim__bilgi">
+        <div>
+          <dt>E-posta</dt>
+          <dd><a href={`mailto:${iletisim.eposta}`}>{iletisim.eposta}</a></dd>
+        </div>
+        <div>
+          <dt>Hizmet bölgesi</dt>
+          <dd>{iletisim.bolge}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <!-- Müşterinin ilk mesajı kolaylaşsın: ne yazacağını söylüyoruz -->
+    <aside class="ipucu" aria-labelledby="ipucu-baslik">
+      <h3 id="ipucu-baslik">Teklif için şunları yazmanız yeterli</h3>
+      <ol>
+        <li>İşletmenizin adı ve ne iş yaptığınız</li>
+        <li>Sitede olmasını istedikleriniz: menü, randevu, galeri…</li>
+        <li>Varsa beğendiğiniz bir sitenin adresi</li>
+      </ol>
+      <p class="ipucu__not">Genellikle aynı gün dönüş yaparım.</p>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .iletisim {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 960px) {
+    .iletisim {
+      grid-template-columns: 1.2fr 1fr;
+      align-items: start;
+    }
+  }
+
+  .iletisim__butonlar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  /* Tanım listesi: "Telefon → numara" gibi etiket-değer çiftleri */
+  .iletisim__bilgi {
+    display: grid;
+    gap: 1.25rem;
+    margin: 0;
+  }
+
+  .iletisim__bilgi div {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .iletisim__bilgi dt {
+    font-family: var(--font-kod);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--yaprak-koyu);
+  }
+
+  .iletisim__bilgi dd {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .iletisim__bilgi a {
+    color: var(--orman);
+  }
+
+  .ipucu {
+    padding: 2rem;
+    border: 1px solid var(--cizgi);
+    border-radius: 16px;
+    background: var(--nane);
+  }
+
+  .ipucu h3 {
+    font-size: 1.2rem;
+  }
+
+  .ipucu ol {
+    margin: 0 0 1.25rem;
+    padding-left: 1.25rem;
+    color: var(--yazi-ikincil);
+  }
+
+  .ipucu li + li {
+    margin-top: 0.5rem;
+  }
+
+  .ipucu__not {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--yazi-ikincil);
+  }
+</style>

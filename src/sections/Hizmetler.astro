@@ -1,0 +1,95 @@
+---
+// Hizmetler bölümü: veriler src/data/hizmetler.ts dosyasından gelir
+import BolumBasligi from '../components/BolumBasligi.astro'
+import { hizmetler } from '../data/hizmetler'
+---
+
+<section id="hizmetler" class="bolum bolum--beyaz" aria-labelledby="hizmetler-baslik">
+  <div class="kapsayici">
+    <BolumBasligi
+      id="hizmetler-baslik"
+      etiket="hizmetler"
+      baslik="İşletmenize ne lazımsa"
+      aciklama="Tek sayfalık bir tanıtımdan üye girişli bir panele kadar; ihtiyacınız kadarını yapalım."
+    />
+
+    <ul class="hizmetler">
+      {hizmetler.map((hizmet, sira) => (
+        <li class="hizmet">
+          <span class="hizmet__no" aria-hidden="true">{String(sira + 1).padStart(2, '0')}</span>
+          <h3>{hizmet.baslik}</h3>
+          <p>{hizmet.aciklama}</p>
+          <p class="hizmet__kimler">{hizmet.kimler}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* Ekran genişliğine göre 1, 2 ya da 3 sütun: medya sorgusu gerekmez */
+  .hizmetler {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .hizmet {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.75rem;
+    border: 1px solid var(--cizgi);
+    border-radius: 16px;
+    background: var(--nane);
+    transition: border-color var(--gecis), transform var(--gecis);
+  }
+
+  .hizmet:hover {
+    border-color: var(--yaprak);
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hizmet:hover {
+      transform: none;
+    }
+  }
+
+  /* Numara rozeti: logodaki gibi bal peteği şeklinde */
+  .hizmet__no {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 55px;
+    margin-bottom: 0.5rem;
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    background: var(--yaprak-koyu);
+    color: var(--beyaz);
+    font-family: var(--font-kod);
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+
+  .hizmet h3 {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+
+  .hizmet p {
+    margin: 0;
+    color: var(--yazi-ikincil);
+  }
+
+  /* "Kimler için" satırı her kartta en alta yaslanır */
+  .hizmet .hizmet__kimler {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    font-family: var(--font-kod);
+    font-size: 0.85rem;
+    color: var(--yaprak-koyu);
+  }
+</style>

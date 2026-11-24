@@ -1,0 +1,83 @@
+---
+// Çalışma süreci: müşteri baştan neyin ne zaman olacağını bilsin
+// Bu veri yalnızca burada kullanıldığı için ayrı dosyaya koymadık
+import BolumBasligi from '../components/BolumBasligi.astro'
+
+const adimlar = [
+  {
+    baslik: 'Tanışalım',
+    aciklama: 'İşletmenizi, müşterilerinizi ve sitede ne görmek istediğinizi konuşuruz. Telefonla ya da yüz yüze.',
+  },
+  {
+    baslik: 'Teklif ve taslak',
+    aciklama: 'İhtiyacınıza göre net bir teklif ve ana sayfanın ilk tasarımını hazırlarım. Siz onaylamadan iş başlamaz.',
+  },
+  {
+    baslik: 'Geliştirme',
+    aciklama: 'Siteyi kodlarken size bir önizleme bağlantısı veririm; ilerlemeyi telefonunuzdan takip edersiniz.',
+  },
+  {
+    baslik: 'Yayın ve destek',
+    aciklama: 'Alan adı, yayın ve Google kaydı benden. Yayından sonra küçük değişiklikler için bana ulaşabilirsiniz.',
+  },
+]
+---
+
+<section id="surec" class="bolum bolum--koyu" aria-labelledby="surec-baslik">
+  <div class="kapsayici">
+    <BolumBasligi
+      id="surec-baslik"
+      etiket="süreç"
+      baslik="Nasıl çalışıyoruz?"
+      aciklama="Dört adım, sürpriz yok. Her adımda ne olduğunu bilirsiniz."
+      koyu
+    />
+
+    <ol class="adimlar" role="list">
+      {adimlar.map((adim, sira) => (
+        <li class="adim">
+          <span class="adim__no" aria-hidden="true">{String(sira + 1).padStart(2, '0')} /</span>
+          <h3>{adim.baslik}</h3>
+          <p>{adim.aciklama}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .adimlar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Her adımın üstünde ince bir çizgi: adımlar bir zaman çizelgesi gibi okunur */
+  .adim {
+    padding-top: 1.25rem;
+    border-top: 2px solid #2F6B52;
+  }
+
+  .adim__no {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-kod);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--filiz);
+  }
+
+  .adim h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+    color: var(--beyaz);
+  }
+
+  .adim p {
+    margin: 0;
+    color: #A9CDBA;
+  }
+</style>
