@@ -1,24 +1,31 @@
-# build output
-dist/
-# generated types
-.astro/
-
-# dependencies
+# Bağımlılıklar (npm install ile yeniden kurulur)
 node_modules/
 
-# logs
+# Derleme çıktısı (npm run build üretir, yayın servisi kendisi derler)
+dist/
+
+# Astro'nun ürettiği tipler ve önbellek
+.astro/
+
+# Ortam değişkenleri: API anahtarı gibi gizli bilgiler asla repoya girmez
+.env
+.env.*
+!.env.example
+
+# Günlük dosyaları
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-
-# environment variables
-.env
-.env.production
-
-# macOS-specific files
+# İşletim sistemi ve editör dosyaları
 .DS_Store
-
-# jetbrains setting folder
+Thumbs.db
 .idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+
+# Yayın servislerinin yerel ayar klasörleri
+.vercel/
+.netlify/
