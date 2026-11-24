@@ -20,15 +20,15 @@ export const demolar: Demo[] = [
   {
     sektor: 'Berber',
     baslik: 'Online randevu',
-    aciklama: 'Hizmet ve saat seçimi, çalışma saatleri, tek dokunuşla arama.',
-    durum: 'hazirlaniyor',
+    aciklama: 'Hizmet, gün ve saat seçimi; dolu saatler kapalı, anında onay.',
+    durum: 'yayinda',
     adres: '/demolar/berber',
   },
   {
     sektor: 'Veteriner',
     baslik: 'Klinik tanıtım sitesi',
-    aciklama: 'Hizmetler, acil hat, yol tarifi ve çalışma saatleri tek sayfada.',
-    durum: 'hazirlaniyor',
+    aciklama: 'Hizmetler, anlık açık/kapalı durumu, çalışma saatleri ve sık sorulan sorular.',
+    durum: 'yayinda',
     adres: '/demolar/veteriner',
   },
 ]

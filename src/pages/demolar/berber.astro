@@ -1,0 +1,474 @@
+---
+// Demo: berber online randevu (hayalî işletme, veriler hiçbir yere gönderilmez)
+import  DemoLayout  from '../../layouts/DemoLayout.astro'
+import { berberHizmetleri, calismaSaatleri } from '../../data/demolar/berber'
+
+// Açılıştan kapanışa yarım saatlik dilimler: 10:00, 10:30 … 19:30
+const saatler: string[] = []
+for (let dakika = calismaSaatleri.acilis * 60; dakika < calismaSaatleri.kapanis * 60; dakika += 30) {
+  const saat = String(Math.floor(dakika / 60)).padStart(2, '0')
+  const dk = String(dakika % 60).padStart(2, '0')
+  saatler.push(`${saat}:${dk}`)
+}
+
+// Fiyatı Türk lirası biçiminde yaz: 400 → ₺400
+const para = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 })
+---
+
+<DemoLayout
+  baslik="Berber randevu demosu"
+  aciklama="Örnek bir berber için online randevu sayfası: hizmet, gün ve saat seçimi."
+>
+  <div class="berber">
+    <header class="vitrin">
+      <div class="kutu">
+        <p class="vitrin__ust">Erkek kuaförü · Kayseri</p>
+        <h1>Ustura Berber</h1>
+        <p class="vitrin__metin">
+          Sıra beklemeyin: hizmetinizi, gününüzü ve saatinizi seçin, koltuğunuz hazır olsun.
+        </p>
+        <dl class="vitrin__bilgi">
+          <div>
+            <dt>Çalışma saatleri</dt>
+            <dd>Pazartesi–Cumartesi · 10:00–20:00</dd>
+          </div>
+          <div>
+            <dt>Adres</dt>
+            <dd>Örnek Mah. Demo Cad. No: 7, Kayseri</dd>
+          </div>
+        </dl>
+        <a class="b-buton" href="#randevu">Randevu al</a>
+      </div>
+    </header>
+
+    <section id="randevu" class="randevu" aria-labelledby="randevu-baslik">
+      <div class="kutu">
+        <h2 id="randevu-baslik">Randevu al</h2>
+
+        <form class="form" data-randevu-formu>
+          <fieldset>
+            <legend>1. Hizmet</legend>
+            <div class="secenekler secenekler--hizmet">
+              {berberHizmetleri.map((hizmet) => (
+                <label class="secenek">
+                  <input type="radio" name="hizmet" value={hizmet.id} data-ad={hizmet.ad} required />
+                  <span class="secenek__ad">{hizmet.ad}</span>
+                  <span class="secenek__detay">{hizmet.sure} dk · {para.format(hizmet.fiyat)}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>2. Gün</legend>
+            <!-- Günler tarayıcıda üretilir: site derlendiği gün değil, ziyaret edilen gün esas -->
+            <div class="secenekler secenekler--gun" data-gunler></div>
+            <template data-gun-sablonu>
+              <label class="secenek secenek--kucuk">
+                <input type="radio" name="gun" required />
+                <span class="secenek__ad" data-gun-adi></span>
+                <span class="secenek__detay" data-gun-no></span>
+              </label>
+            </template>
+            <noscript>
+              <p class="ipucu">Gün seçimi için tarayıcınızda JavaScript açık olmalı.</p>
+            </noscript>
+          </fieldset>
+
+          <fieldset>
+            <legend>3. Saat</legend>
+            <p class="ipucu" data-saat-ipucu>Önce bir gün seçin.</p>
+            <div class="secenekler secenekler--saat">
+              {saatler.map((saat) => (
+                <label class="secenek secenek--kucuk">
+                  <input type="radio" name="saat" value={saat} required disabled />
+                  <span class="secenek__ad">{saat}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>4. Bilgileriniz</legend>
+            <div class="alanlar">
+              <label class="alan">
+                <span>Ad soyad</span>
+                <input type="text" name="ad" autocomplete="name" required />
+              </label>
+              <label class="alan">
+                <span>Telefon</span>
+                <input type="tel" name="telefon" autocomplete="tel" inputmode="tel" required />
+              </label>
+            </div>
+            <p class="ipucu">Demo: bilgileriniz hiçbir yere gönderilmez, sayfayı yenileyince silinir.</p>
+          </fieldset>
+
+          <button class="b-buton" type="submit">Randevuyu onayla</button>
+        </form>
+
+        <div class="onay" data-onay tabindex="-1" hidden>
+          <h3>Randevunuz alındı</h3>
+          <p data-ozet></p>
+          <p class="ipucu">Bu bir demo; gerçek bir randevu oluşturulmadı.</p>
+          <button class="b-buton b-buton--ikincil" type="button" data-yeni>Yeni randevu</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</DemoLayout>
+
+<style>
+  /* Demo işletmenin kendi teması: koyu zemin, altın vurgu */
+  .berber {
+    --koyu: #16130F;
+    --kart: #221D17;
+    --cizgi-b: #3A3128;
+    --altin: #D4AF37;
+    --krem: #F3EEE4;
+    --soluk-b: #B9AE9C;
+    background: var(--koyu);
+    color: var(--krem);
+  }
+
+  .kutu {
+    max-width: 880px;
+    margin: 0 auto;
+    padding-inline: 1.25rem;
+  }
+
+  /* Üst tanıtım alanı */
+  .vitrin {
+    padding: 4rem 0 3rem;
+    border-bottom: 1px solid var(--cizgi-b);
+  }
+
+  .vitrin__ust {
+    margin: 0 0 0.5rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--altin);
+  }
+
+  .vitrin h1 {
+    margin: 0 0 1rem;
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    letter-spacing: -0.03em;
+  }
+
+  .vitrin__metin {
+    max-width: 46ch;
+    font-size: 1.1rem;
+    color: var(--soluk-b);
+  }
+
+  .vitrin__bilgi {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2.5rem;
+    margin: 2rem 0;
+  }
+
+  .vitrin__bilgi dt {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--altin);
+  }
+
+  .vitrin__bilgi dd {
+    margin: 0;
+  }
+
+  /* Demonun kendi butonu (sitenin yeşil butonundan bilerek farklı) */
+  .b-buton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--altin);
+    border-radius: 999px;
+    background: var(--altin);
+    color: var(--koyu);
+    font: inherit;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .b-buton:hover {
+    background: transparent;
+    color: var(--altin);
+  }
+
+  .b-buton--ikincil {
+    background: transparent;
+    color: var(--altin);
+  }
+
+  .b-buton--ikincil:hover {
+    background: var(--altin);
+    color: var(--koyu);
+  }
+
+  .b-buton:focus-visible {
+    outline-color: var(--altin);
+  }
+
+  /* Randevu formu */
+  .randevu {
+    padding: 3.5rem 0 5rem;
+  }
+
+  .randevu h2 {
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+  }
+
+  .form {
+    display: grid;
+    gap: 2rem;
+  }
+
+  /* display: grid, hidden özelliğini ezer: gizliyken mutlaka kapat */
+  .form[hidden],
+  .onay[hidden] {
+    display: none;
+  }
+
+  fieldset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  legend {
+    margin-bottom: 0.75rem;
+    padding: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--altin);
+  }
+
+  .secenekler {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .secenekler--hizmet {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  }
+
+  .secenekler--gun {
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  }
+
+  .secenekler--saat {
+    grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  }
+
+  /* Radyo düğmesi kart görünümünde: asıl input görünmez ama klavyeyle çalışır */
+  .secenek {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-height: 44px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--cizgi-b);
+    border-radius: 12px;
+    background: var(--kart);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .secenek--kucuk {
+    align-items: center;
+    padding: 0.6rem 0.5rem;
+    text-align: center;
+  }
+
+  .secenek input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .secenek:hover {
+    border-color: var(--soluk-b);
+  }
+
+  .secenek:has(input:checked) {
+    border-color: var(--altin);
+    background: #2E2617;
+  }
+
+  .secenek:has(input:focus-visible) {
+    outline: 3px solid var(--altin);
+    outline-offset: 2px;
+  }
+
+  .secenek:has(input:disabled) {
+    opacity: 0.4;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+
+  .secenek__ad {
+    font-weight: 700;
+  }
+
+  .secenek__detay {
+    font-size: 0.85rem;
+    color: var(--soluk-b);
+  }
+
+  .ipucu {
+    margin: 0 0 0.75rem;
+    font-size: 0.9rem;
+    color: var(--soluk-b);
+  }
+
+  .alanlar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .alan {
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.95rem;
+  }
+
+  .alan input {
+    min-height: 48px;
+    padding: 0.5rem 0.875rem;
+    border: 1px solid var(--cizgi-b);
+    border-radius: 10px;
+    background: var(--kart);
+    color: var(--krem);
+    font: inherit;
+  }
+
+  .alan input:focus-visible {
+    outline: 3px solid var(--altin);
+    outline-offset: 1px;
+  }
+
+  /* Onay kutusu */
+  .onay {
+    padding: 2rem;
+    border: 1px solid var(--altin);
+    border-radius: 16px;
+    background: var(--kart);
+  }
+
+  .onay:focus {
+    outline: none;
+  }
+
+  .onay h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1.5rem;
+    color: var(--altin);
+  }
+</style>
+
+<script>
+  // Randevu demosu: her şey tarayıcıda çalışır, hiçbir veri gönderilmez
+  import { calismaSaatleri } from '../../data/demolar/berber'
+
+  const form = document.querySelector<HTMLFormElement>('[data-randevu-formu]')
+  const gunKutusu = document.querySelector<HTMLElement>('[data-gunler]')
+  const sablon = document.querySelector<HTMLTemplateElement>('[data-gun-sablonu]')
+  const saatIpucu = document.querySelector<HTMLElement>('[data-saat-ipucu]')
+  const onay = document.querySelector<HTMLElement>('[data-onay]')
+  const ozet = document.querySelector<HTMLElement>('[data-ozet]')
+  const yeniDugme = document.querySelector<HTMLButtonElement>('[data-yeni]')
+
+  // Tarihi "2026-11-24" biçimine çevir (yerel saatle: toISOString UTC'ye kaydırıp bir gün geri atabilir)
+  const tarihDegeri = (tarih: Date) => {
+    const ay = String(tarih.getMonth() + 1).padStart(2, '0')
+    const gun = String(tarih.getDate()).padStart(2, '0')
+    return `${tarih.getFullYear()}-${ay}-${gun}`
+  }
+
+  const kisaGun = new Intl.DateTimeFormat('tr-TR', { weekday: 'short' })
+  const gunAy = new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'short' })
+  const uzunTarih = new Intl.DateTimeFormat('tr-TR', { weekday: 'long', day: 'numeric', month: 'long' })
+
+  if (form && gunKutusu && sablon && saatIpucu && onay && ozet && yeniDugme) {
+    const saatGirdileri = form.querySelectorAll<HTMLInputElement>('input[name="saat"]')
+
+    // 1) Önümüzdeki 7 açık günü şablondan üret
+    const bugun = new Date()
+    for (let i = 0, eklenen = 0; eklenen < 7; i++) {
+      const gun = new Date(bugun.getFullYear(), bugun.getMonth(), bugun.getDate() + i)
+      if (gun.getDay() === calismaSaatleri.kapaliGun) continue
+
+      const kopya = sablon.content.cloneNode(true) as DocumentFragment
+      const girdi = kopya.querySelector('input')
+      const gunAdi = kopya.querySelector('[data-gun-adi]')
+      const gunNo = kopya.querySelector('[data-gun-no]')
+      if (!girdi || !gunAdi || !gunNo) break
+
+      girdi.value = tarihDegeri(gun)
+      gunAdi.textContent = i === 0 ? 'Bugün' : kisaGun.format(gun)
+      gunNo.textContent = gunAy.format(gun)
+      gunKutusu.append(kopya)
+      eklenen++
+    }
+
+    // 2) Gün seçilince saatleri güncelle: geçmiş ve "dolu" saatler kapanır
+    const saatleriGuncelle = (deger: string) => {
+      const [yil, ay, gun] = deger.split('-').map(Number)
+      const simdi = new Date()
+
+      saatGirdileri.forEach((girdi, sira) => {
+        const [saat, dakika] = girdi.value.split(':').map(Number)
+        const gecmis = new Date(yil, ay - 1, gun, saat, dakika) <= simdi
+        // Demo: her gün farklı birkaç saat dolu görünsün (gerçek sitede bu bilgi sunucudan gelir)
+        const dolu = (gun * 7 + sira * 3) % 5 === 0
+        girdi.disabled = gecmis || dolu
+        if (girdi.disabled) girdi.checked = false
+      })
+      saatIpucu.hidden = true
+    }
+
+    // Olay yetkilendirme: her gün için ayrı dinleyici yerine kutuya tek dinleyici
+    gunKutusu.addEventListener('change', (olay) => {
+      const hedef = olay.target as HTMLInputElement
+      saatleriGuncelle(hedef.value)
+    })
+
+    // 3) Gönderince sayfayı yenileme, özeti göster
+    form.addEventListener('submit', (olay) => {
+      olay.preventDefault()
+      const veri = new FormData(form)
+      const hizmet = form.querySelector<HTMLInputElement>('input[name="hizmet"]:checked')?.dataset.ad ?? ''
+      const [yil, ay, gun] = String(veri.get('gun')).split('-').map(Number)
+      const tarih = uzunTarih.format(new Date(yil, ay - 1, gun))
+
+      ozet.textContent = `${veri.get('ad')}, ${tarih} saat ${veri.get('saat')} için ${hizmet} randevunuz oluşturuldu.`
+      form.hidden = true
+      onay.hidden = false
+      onay.focus()
+    })
+
+    // 4) Yeni randevu: formu sıfırla, saatleri yeniden kilitle
+    yeniDugme.addEventListener('click', () => {
+      form.reset()
+      saatGirdileri.forEach((girdi) => {
+        girdi.disabled = true
+      })
+      saatIpucu.hidden = false
+      onay.hidden = true
+      form.hidden = false
+      form.querySelector<HTMLInputElement>('input[name="hizmet"]')?.focus()
+    })
+  }
+</script>
