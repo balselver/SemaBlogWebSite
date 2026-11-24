@@ -1,0 +1,58 @@
+---
+// Bölüm başlığı: küçük kod etiketi + h2 + isteğe bağlı açıklama
+interface Props {
+  // h2'nin id'si: bölüm aria-labelledby ile bu başlığa bağlanır
+  id: string
+  // Başlığın üstündeki etiket, ör. "hizmetler" → <hizmetler />
+  etiket: string
+  baslik: string
+  aciklama?: string
+  // Koyu zeminli bölümde mi? (renkler açık tonlara döner)
+  koyu?: boolean
+}
+
+const { id, etiket, baslik, aciklama, koyu = false } = Astro.props
+---
+
+<div class:list={['bolum-basligi', { 'bolum-basligi--koyu': koyu }]}>
+  <p class="bolum-basligi__etiket">&lt;{etiket} /&gt;</p>
+  <h2 id={id}>{baslik}</h2>
+  {aciklama && <p class="bolum-basligi__aciklama">{aciklama}</p>}
+</div>
+
+<style>
+  .bolum-basligi {
+    max-width: 640px;
+    margin-bottom: 3rem;
+  }
+
+  .bolum-basligi__etiket {
+    margin-bottom: 0.75rem;
+    font-family: var(--font-kod);
+    font-size: 0.9rem;
+    color: var(--yaprak-koyu);
+  }
+
+  .bolum-basligi h2 {
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  }
+
+  .bolum-basligi__aciklama {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--yazi-ikincil);
+  }
+
+  /* Koyu zeminde okunabilir renkler */
+  .bolum-basligi--koyu .bolum-basligi__etiket {
+    color: var(--filiz);
+  }
+
+  .bolum-basligi--koyu h2 {
+    color: var(--beyaz);
+  }
+
+  .bolum-basligi--koyu .bolum-basligi__aciklama {
+    color: #A9CDBA;
+  }
+</style>
