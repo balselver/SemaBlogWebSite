@@ -1,57 +1,16 @@
 ---
-// Geçici ana sayfa: iskeleti denemek için (1B'de Header ve Hero ile değişecek)
 import BaseLayout from "./layouts/BaseLayout.astro";
-import Logo from "./components/Logo.astro";
+import Header from "./components/Header.astro";
+import Hero from "../sections/Hero.astro";
+import Footer from "../components/Footer.astro";
 ---
 
 <BaseLayout>
-	<main class="kapsayici deneme">
-		<Logo genislik={260} />
+	<Header />
 
-		<h1>Kayseri'deki işletmelere hızlı, mobil uyumlu web siteleri.</h1>
-		<p>
-			İskelet çalışıyor. Bu sayfa bir sonraki adımda gerçek ana sayfayla
-			değişecek.
-		</p>
-
-		<div class="deneme__butonlar">
-			<a class="buton buton--birincil" href="#">
-				Teklif al
-			</a>
-			<a class="buton buton--ikincil" href="#">
-				Örnek işler
-			</a>
-		</div>
-
-		<div class="deneme__koyu">
-			<Logo koyu genislik={180} />
-		</div>
+	<main id="icerik">
+		<Hero />
 	</main>
+
+	<Footer />
 </BaseLayout>
-
-<style>
-	.deneme {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 1.5rem;
-		padding-block: 4rem;
-	}
-
-	.deneme h1 {
-		max-width: 18ch;
-		font-size: clamp(2rem, 5vw, 3.25rem);
-	}
-
-	.deneme__butonlar {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.75rem;
-	}
-
-	.deneme__koyu {
-		padding: 1.5rem 2rem;
-		border-radius: var(--yaricap);
-		background: var(--orman);
-	}
-</style>
