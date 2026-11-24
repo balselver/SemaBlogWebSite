@@ -1,0 +1,62 @@
+---
+// Demo sayfalarının ortak şablonu: "bu bir demo" şeridi, arama motorlarına kapalı
+import BaseLayout from './BaseLayout.astro'
+
+interface Props {
+  baslik: string
+  aciklama: string
+}
+
+const { baslik, aciklama } = Astro.props
+---
+
+<BaseLayout baslik={baslik} aciklama={aciklama}>
+  <!-- İşletmeler gerçek değil: Google bu sayfaları listelemesin -->
+  <meta slot="head" name="robots" content="noindex" />
+
+  <div class="demo-serit">
+    <a class="demo-serit__geri" href="/#portfoy"><span aria-hidden="true">←</span> ssb</a>
+    <p>Bu bir demo sayfası: işletme, fiyatlar ve saatler gerçek değil.</p>
+    <a class="demo-serit__teklif" href="/#iletisim">Sizin için de yapalım</a>
+  </div>
+
+  <main id="icerik">
+    <slot />
+  </main>
+</BaseLayout>
+
+<style>
+  .demo-serit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+    padding: 0.625rem 1.25rem;
+    background: var(--orman);
+    color: #D3E5DA;
+    font-size: 0.9rem;
+  }
+
+  .demo-serit p {
+    flex: 1 1 260px;
+    margin: 0;
+  }
+
+  .demo-serit a {
+    color: var(--beyaz);
+    font-weight: 500;
+  }
+
+  .demo-serit__geri {
+    font-family: var(--font-kod);
+    text-decoration: none;
+  }
+
+  .demo-serit__teklif {
+    color: var(--filiz);
+  }
+
+  .demo-serit a:focus-visible {
+    outline-color: var(--filiz);
+  }
+</style>
