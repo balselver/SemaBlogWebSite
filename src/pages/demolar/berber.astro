@@ -1,6 +1,6 @@
 ---
 // Demo: berber online randevu (hayalî işletme, veriler hiçbir yere gönderilmez)
-import  DemoLayouts  from '../../layouts/DemoLayouts.astro'
+import  DemoLayout  from '../../layouts/DemoLayout.astro'
 import { berberHizmetleri, calismaSaatleri } from '../../data/demolar/berber'
 
 // Açılıştan kapanışa yarım saatlik dilimler: 10:00, 10:30 … 19:30
@@ -15,7 +15,7 @@ for (let dakika = calismaSaatleri.acilis * 60; dakika < calismaSaatleri.kapanis 
 const para = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 })
 ---
 
-<DemoLayouts
+<DemoLayout
   baslik="Berber randevu demosu"
   aciklama="Örnek bir berber için online randevu sayfası: hizmet, gün ve saat seçimi."
 >
@@ -115,7 +115,7 @@ const para = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY'
       </div>
     </section>
   </div>
-</DemoLayouts>
+</DemoLayout>
 
 <style>
   /* Demo işletmenin kendi teması: koyu zemin, altın vurgu */
