@@ -1,0 +1,154 @@
+/* ===== Tema değişkenleri: renkler, yazı tipleri, ölçüler ===== */
+:root {
+  /* Marka renkleri */
+  --orman: #0F3D2E;
+  --yaprak: #1E8A55;
+  --yaprak-koyu: #1A7A4B;
+  --filiz: #4BD68A;
+  --nane: #F1F5F0;
+  --silik: #BFDDC9;
+  --beyaz: #FFFFFF;
+
+  /* Yazı ve çizgi renkleri */
+  --yazi: var(--orman);
+  --yazi-ikincil: #3D5A4E;
+  --cizgi: #D5E3D9;
+
+  /* Yazı tipleri */
+  --font-govde: 'Space Grotesk Variable', system-ui, sans-serif;
+  --font-kod: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+  /* Ölçüler */
+  --kapsayici-genislik: 1200px;
+  --yaricap: 12px;
+  --gecis: 0.2s ease;
+}
+
+/* ===== Temel sıfırlama ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Hareket azaltmayı seçen kullanıcılar için yumuşak kaydırmayı kapat */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-govde);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--yazi);
+  background: var(--nane);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0 0 0.5em;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--yaprak-koyu);
+}
+
+code {
+  font-family: var(--font-kod);
+}
+
+/* Klavyeyle gezinirken odaklanan öğe belirgin olsun */
+:focus-visible {
+  outline: 3px solid var(--yaprak);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ===== Yardımcı sınıflar ===== */
+
+/* Sayfa içeriğini ortalayan, kenarlardan boşluk bırakan kutu */
+.kapsayici {
+  width: 100%;
+  max-width: var(--kapsayici-genislik);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .kapsayici {
+    padding-inline: 2rem;
+  }
+}
+
+/* Butonlar: <a> ve <button> için ortak görünüm */
+.buton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.75rem 1.25rem;
+  border: 2px solid transparent;
+  border-radius: var(--yaricap);
+  font: inherit;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--gecis), color var(--gecis), border-color var(--gecis);
+}
+
+.buton--birincil {
+  background: var(--yaprak-koyu);
+  color: var(--beyaz);
+}
+
+.buton--birincil:hover {
+  background: var(--orman);
+}
+
+.buton--ikincil {
+  background: transparent;
+  color: var(--orman);
+  border-color: var(--orman);
+}
+
+.buton--ikincil:hover {
+  background: var(--orman);
+  color: var(--beyaz);
+}
+
+/* Ekranda görünmez, ekran okuyucu okur (ör. ikon butonların etiketi) */
+.gorunmez {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

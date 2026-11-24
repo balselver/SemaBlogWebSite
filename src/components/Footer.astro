@@ -1,0 +1,123 @@
+---
+// Sitenin alt kısmı: logo, kısa açıklama, bağlantılar, telif satırı
+import Logo from "../pages/components/Logo.astro";
+import { menuBaglantilari } from "../data/menu";
+
+// Profil adresleri: Bionluk adresini kendi profilinizle değiştirin
+const profiller = [
+    { metin: "GitHub", adres: "https://github.com/balselver" },
+    { metin: "Bionluk", adres: "https://bionluk.com/KULLANICI_ADINIZ" },
+];
+
+// Telif yılı: site her derlendiğinde güncellenir
+const yil = new Date().getFullYear();
+---
+
+<footer class="alt">
+    <div class="kapsayici alt__ic">
+        <div class="alt__marka">
+            <Logo koyu genislik={120} />
+            <p>Kayseri'deki işletmeler için web tasarım ve yazılım.</p>
+        </div>
+
+        <nav aria-label="Alt menü">
+            <h2 class="alt__baslik">Sayfa</h2>
+            <ul class="alt__liste">
+                {menuBaglantilari.map((baglanti) => (
+                    <li>
+                        <a href={baglanti.adres}>{baglanti.metin}</a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+
+        <!-- Telefon ve e-posta 4. aşamada (iletişim) eklenecek -->
+        <div>
+            <h2 class="alt__baslik">Profiller</h2>
+            <ul class="alt__liste">
+                {profiller.map((profil) => (
+                    <li>
+                        <a
+                            href={profil.adres}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {profil.metin}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    </div>
+
+    <div class="kapsayici">
+        <p class="alt__telif">© {yil} ssb. Tüm hakları saklıdır.</p>
+    </div>
+</footer>
+
+<style>
+    .alt {
+        padding-top: 3.5rem;
+        background: var(--orman);
+        color: #d3e5da;
+    }
+
+    .alt__ic {
+        display: grid;
+        gap: 2.5rem;
+        padding-bottom: 2.5rem;
+    }
+
+    .alt__marka p {
+        max-width: 32ch;
+        margin-top: 1rem;
+    }
+
+    .alt__baslik {
+        margin-bottom: 0.75rem;
+        font-family: var(--font-kod);
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #a9cdba;
+    }
+
+    .alt__liste {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .alt__liste a {
+        color: var(--beyaz);
+        text-decoration: none;
+    }
+
+    .alt__liste a:hover {
+        color: var(--filiz);
+        text-decoration: underline;
+    }
+
+    /* Koyu zeminde koyu yeşil odak çerçevesi görünmez: açık yeşil yap */
+    .alt a:focus-visible {
+        outline-color: var(--filiz);
+    }
+
+    .alt__telif {
+        margin: 0;
+        padding-block: 1.25rem;
+        border-top: 1px solid #2f6b52;
+        font-size: 0.9rem;
+        color: #a9cdba;
+    }
+
+    @media (min-width: 768px) {
+        .alt__ic {
+            grid-template-columns: 2fr 1fr 1fr;
+        }
+    }
+</style>

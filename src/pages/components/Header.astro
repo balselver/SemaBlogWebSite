@@ -1,0 +1,240 @@
+---
+// Sitenin üst kısmı: logo, gezinme bağlantıları, mobil menü
+import Logo from "./Logo.astro";
+import { menuBaglantilari } from "../../data/menu";
+---
+
+<!-- Klavye kullanıcıları için: Tab'a ilk basışta görünür, menüyü atlayıp içeriğe geçirir -->
+<a class="atla" href="#icerik">
+    İçeriğe geç
+</a>
+
+<header class="ust">
+    <div class="kapsayici ust__ic">
+        <a class="ust__logo" href="/" aria-label="ssb ana sayfa">
+            <Logo genislik={104} />
+        </a>
+
+        <!-- Yalnızca mobilde görünen menü düğmesi -->
+        <button
+            class="ust__dugme"
+            type="button"
+            aria-expanded="false"
+            aria-controls="ana-menu"
+            data-menu-dugme
+        >
+            <span class="gorunmez">Menüyü aç veya kapat</span>
+            <!-- Menü kapalıyken üç çizgi -->
+            <svg
+                class="ikon-ac"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+                <path
+                    d="M4 7h16M4 12h16M4 17h16"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                />
+            </svg>
+            <!-- Menü açıkken çarpı -->
+            <svg
+                class="ikon-kapat"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+                <path
+                    d="M6 6l12 12M18 6L6 18"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                />
+            </svg>
+        </button>
+
+        <nav
+            class="ust__menu"
+            id="ana-menu"
+            aria-label="Ana menü"
+            data-menu
+            data-acik="false"
+        >
+            <ul class="ust__liste">
+                {menuBaglantilari.map((baglanti) => (
+                    <li>
+                        <a href={baglanti.adres}>{baglanti.metin}</a>
+                    </li>
+                ))}
+            </ul>
+            <a class="buton buton--birincil" href="/#iletisim">
+                Teklif al
+            </a>
+        </nav>
+    </div>
+</header>
+
+<style>
+    /* "İçeriğe geç": normalde ekranın dışında, odaklanınca görünür */
+    .atla {
+        position: absolute;
+        top: -100px;
+        left: 1rem;
+        z-index: 20;
+        padding: 0.75rem 1rem;
+        border-radius: var(--yaricap);
+        background: var(--orman);
+        color: var(--beyaz);
+        text-decoration: none;
+    }
+
+    .atla:focus {
+        top: 1rem;
+    }
+
+    /* Kaydırırken üstte sabit kalan, arkası hafif bulanık başlık */
+    .ust {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: rgb(241 245 240 / 0.92);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--cizgi);
+    }
+
+    .ust__ic {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        min-height: 72px;
+    }
+
+    .ust__logo {
+        display: flex;
+        padding-block: 0.5rem;
+    }
+
+    .ust__dugme {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        border: 1px solid var(--cizgi);
+        border-radius: 10px;
+        background: var(--beyaz);
+        color: var(--orman);
+        cursor: pointer;
+    }
+
+    /* Düğmenin durumuna göre hangi ikonun görüneceği */
+    .ust__dugme[aria-expanded="true"] .ikon-ac,
+    .ust__dugme[aria-expanded="false"] .ikon-kapat {
+        display: none;
+    }
+
+    /* Mobil: menü, başlığın hemen altında açılan bir panel */
+    .ust__menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 0.5rem 1.25rem 1.5rem;
+        background: var(--nane);
+        border-bottom: 1px solid var(--cizgi);
+    }
+
+    .ust__menu[data-acik="true"] {
+        display: flex;
+    }
+
+    .ust__liste {
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .ust__liste a {
+        display: block;
+        padding: 0.75rem 0;
+        color: var(--orman);
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .ust__liste a:hover {
+        color: var(--yaprak-koyu);
+    }
+
+    /* Tablet ve üstü: düğme gizlenir, menü her zaman yatay görünür */
+    @media (min-width: 768px) {
+        .ust__dugme {
+            display: none;
+        }
+
+        .ust__menu,
+        .ust__menu[data-acik="true"] {
+            display: flex;
+            position: static;
+            flex-direction: row;
+            align-items: center;
+            gap: 2rem;
+            padding: 0;
+            background: none;
+            border: 0;
+        }
+
+        .ust__liste {
+            flex-direction: row;
+            gap: 1.75rem;
+        }
+
+        .ust__liste a {
+            padding: 0.5rem 0;
+        }
+    }
+</style>
+
+<script>
+    // Mobil menü: düğmeye basınca aç/kapat (bu kod tarayıcıda çalışır)
+    const dugme =
+        document.querySelector<HTMLButtonElement>("[data-menu-dugme]");
+    const menu = document.querySelector<HTMLElement>("[data-menu]");
+
+    if (dugme && menu) {
+        const ayarla = (acik: boolean) => {
+            dugme.setAttribute("aria-expanded", String(acik));
+            menu.dataset.acik = String(acik);
+        };
+
+        dugme.addEventListener("click", () => {
+            ayarla(dugme.getAttribute("aria-expanded") !== "true");
+        });
+
+        // Bir bağlantıya tıklanınca menüyü kapat (sayfa içinde kayarken açık kalmasın)
+        menu.querySelectorAll("a").forEach((baglanti) => {
+            baglanti.addEventListener("click", () => ayarla(false));
+        });
+
+        // Escape menüyü kapatır ve odağı düğmeye geri verir
+        document.addEventListener("keydown", (olay) => {
+            if (
+                olay.key === "Escape" &&
+                dugme.getAttribute("aria-expanded") === "true"
+            ) {
+                ayarla(false);
+                dugme.focus();
+            }
+        });
+    }
+</script>

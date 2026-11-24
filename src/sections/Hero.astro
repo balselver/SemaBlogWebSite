@@ -1,0 +1,144 @@
+---
+// Ana sayfanın ilk bölümü: ne yapıyorum, kime yapıyorum, harekete geçiren butonlar
+---
+
+<section class="hero" aria-labelledby="hero-baslik">
+    <div class="kapsayici hero__ic">
+        <div class="hero__metin">
+            <p class="hero__ust">&lt;web tasarım &amp; yazılım /&gt;</p>
+
+            <h1 id="hero-baslik">
+                Kayseri'deki işletmelere hızlı, mobil uyumlu web siteleri.
+            </h1>
+
+            <p class="hero__aciklama">
+                Lokantanızın menüsü, berberinizin randevusu, kliniğinizin
+                hizmetleri… Müşterileriniz sizi Google'da aradığında karşılarına
+                düzgün bir site çıksın.
+            </p>
+
+            <div class="hero__butonlar">
+                <a class="buton buton--birincil" href="#iletisim">
+                    Teklif al
+                </a>
+                <a class="buton buton--ikincil" href="#portfoy">
+                    Örnek işleri gör
+                </a>
+            </div>
+
+            <ul class="hero__ozellikler">
+                <li>Telefonda kusursuz</li>
+                <li>Hızlı açılır</li>
+                <li>Google'da bulunur</li>
+            </ul>
+        </div>
+
+        <!-- Dekoratif kod kartı: ekran okuyucu atlar, bilgi yukarıdaki metinde zaten var -->
+        <div class="hero__kart" aria-hidden="true">
+            <pre><code><span class="k-etiket">&lt;Site</span>
+  <span class="k-ozellik">isletme</span>=<span class="k-deger">"Sizin işletmeniz"</span>
+  <span class="k-ozellik">mobil</span>=<span class="k-deger">&#123;true&#125;</span>
+  <span class="k-ozellik">hizli</span>=<span class="k-deger">&#123;true&#125;</span>
+  <span class="k-ozellik">seo</span>=<span class="k-deger">&#123;true&#125;</span>
+<span class="k-etiket">/&gt;</span></code></pre>
+        </div>
+    </div>
+</section>
+
+<style>
+    .hero {
+        padding-block: 4rem 5rem;
+    }
+
+    .hero__ic {
+        display: grid;
+        align-items: center;
+        gap: 3rem;
+    }
+
+    .hero__ust {
+        margin-bottom: 1rem;
+        font-family: var(--font-kod);
+        font-size: 0.9rem;
+        color: var(--yaprak-koyu);
+    }
+
+    .hero h1 {
+        max-width: 16ch;
+        font-size: clamp(2.25rem, 5vw, 3.5rem);
+    }
+
+    .hero__aciklama {
+        max-width: 52ch;
+        font-size: 1.15rem;
+        color: var(--yazi-ikincil);
+    }
+
+    .hero__butonlar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 2rem;
+    }
+
+    .hero__ozellikler {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1.5rem;
+        margin: 2rem 0 0;
+        padding: 0;
+        list-style: none;
+        font-size: 0.95rem;
+        color: var(--yazi-ikincil);
+    }
+
+    /* Tik işareti: ikinci satır, ekran okuyucunun "onay işareti" diye okumasını engeller */
+    .hero__ozellikler li::before {
+        content: "✓";
+        content: "✓" / "";
+        margin-right: 0.4rem;
+        font-weight: 700;
+        color: var(--yaprak-koyu);
+    }
+
+    /* Koyu zeminli kod kartı */
+    .hero__kart {
+        overflow-x: auto;
+        padding: 2rem;
+        border-radius: 20px;
+        background: var(--orman);
+        box-shadow: 0 24px 48px -24px rgb(15 61 46 / 0.5);
+    }
+
+    .hero__kart pre {
+        margin: 0;
+        font-family: var(--font-kod);
+        font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+        line-height: 1.8;
+        color: var(--beyaz);
+    }
+
+    .k-etiket {
+        color: var(--filiz);
+    }
+
+    .k-ozellik {
+        color: #a9cdba;
+    }
+
+    /* Bal sarısı: logodaki "bal" fikrine küçük bir gönderme */
+    .k-deger {
+        color: #ffe08a;
+    }
+
+    /* Geniş ekranda metin solda, kart sağda */
+    @media (min-width: 960px) {
+        .hero {
+            padding-block: 6rem 7rem;
+        }
+
+        .hero__ic {
+            grid-template-columns: 1.2fr 1fr;
+        }
+    }
+</style>
