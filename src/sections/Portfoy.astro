@@ -1,0 +1,239 @@
+---
+// Örnek işler: öne çıkan proje (StokPanel) + sektör demoları
+import { Image } from 'astro:assets'
+import BolumBasligi from '../components/BolumBasligi.astro'
+import { demolar } from '../data/portfoy'
+import stokpanelGosterge from '../assets/portfoy/stokpanel-gosterge.png'
+import stokpanelMobil from '../assets/portfoy/stokpanel-mobil.png'
+
+const teknolojiler = ['React', 'TypeScript', 'ASP.NET Core', 'SQL Server']
+---
+
+<section id="portfoy" class="bolum" aria-labelledby="portfoy-baslik">
+  <div class="kapsayici">
+    <BolumBasligi
+      id="portfoy-baslik"
+      etiket="örnek işler"
+      baslik="Sözle değil, işle"
+      aciklama="Yaptığım bir uygulama ve sektörünüze göre hazırladığım örnek siteler."
+    />
+
+    <!-- Öne çıkan proje -->
+    <article class="proje">
+      <div class="proje__gorseller">
+        <div class="proje__masaustu">
+          <Image
+            src={stokpanelGosterge}
+            alt="StokPanel gösterge ekranı: aktif ürün sayısı, kritik stok uyarıları, bugünkü giriş ve çıkışlar, son hareketler"
+            widths={[640, 960, 1280]}
+            sizes="(min-width: 960px) 600px, 100vw"
+          />
+        </div>
+        <div class="proje__mobil">
+          <Image src={stokpanelMobil} alt="StokPanel'in telefondaki görünümü" width={300} />
+        </div>
+      </div>
+
+      <div class="proje__metin">
+        <p class="proje__tur">Web uygulaması</p>
+        <h3>StokPanel</h3>
+        <p>
+          Küçük ve orta ölçekli işletmeler için stok takip paneli. Ürünler, stok giriş-çıkışları,
+          kritik stok uyarıları ve kimin ne yaptığını gösteren işlem geçmişi tek ekranda.
+        </p>
+        <ul class="proje__ozellikler">
+          <li>Admin ve personel rolleriyle güvenli giriş</li>
+          <li>Stok asla eksiye düşmez, her hareket kayıt altında</li>
+          <li>Telefonda tablolar karta dönüşür</li>
+        </ul>
+        <ul class="etiketler" aria-label="Kullanılan teknolojiler">
+          {teknolojiler.map((teknoloji) => <li>{teknoloji}</li>)}
+        </ul>
+        <a
+          class="buton buton--ikincil"
+          href="https://github.com/balselver/StokPanel"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Kodu GitHub'da incele
+        </a>
+      </div>
+    </article>
+
+    <!-- Sektör demoları -->
+    <h3 class="demolar-baslik">Sektörünüze göre örnekler</h3>
+    <ul class="demolar">
+      {demolar.map((demo) => (
+        <li class="demo">
+          <p class="demo__sektor">{demo.sektor}</p>
+          <h4>{demo.baslik}</h4>
+          <p>{demo.aciklama}</p>
+          {demo.durum === 'yayinda' ? (
+            <a class="demo__baglanti" href={demo.adres}>
+              Demoyu aç <span aria-hidden="true">→</span>
+            </a>
+          ) : (
+            <span class="demo__rozet">Hazırlanıyor</span>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* Öne çıkan proje kartı: geniş ekranda görsel solda, metin sağda */
+  .proje {
+    display: grid;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--cizgi);
+    border-radius: 20px;
+    background: var(--beyaz);
+  }
+
+  @media (min-width: 960px) {
+    .proje {
+      grid-template-columns: 1.1fr 1fr;
+      padding: 2.5rem;
+    }
+  }
+
+  /* Telefon görüntüsü masaüstü görüntüsünün sağ altına biner */
+  .proje__gorseller {
+    position: relative;
+    padding: 0 1.5rem 1.5rem 0;
+  }
+
+  .proje__masaustu {
+    overflow: hidden;
+    border: 1px solid var(--cizgi);
+    border-radius: 12px;
+    box-shadow: 0 24px 48px -28px rgb(15 61 46 / 0.45);
+  }
+
+  .proje__mobil {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 24%;
+    max-width: 140px;
+    overflow: hidden;
+    border: 4px solid var(--orman);
+    border-radius: 18px;
+    box-shadow: 0 16px 32px -12px rgb(15 61 46 / 0.5);
+  }
+
+  /* <Image> bileşeninin ürettiği <img>: kutusunu doldursun, oranı bozulmasın */
+  .proje__gorseller :global(img) {
+    width: 100%;
+    height: auto;
+  }
+
+  .proje__tur {
+    margin-bottom: 0.5rem;
+    font-family: var(--font-kod);
+    font-size: 0.85rem;
+    color: var(--yaprak-koyu);
+  }
+
+  .proje h3 {
+    font-size: 1.75rem;
+  }
+
+  .proje__metin > p:not(.proje__tur) {
+    color: var(--yazi-ikincil);
+  }
+
+  .proje__ozellikler {
+    margin: 0 0 1.5rem;
+    padding-left: 1.25rem;
+    color: var(--yazi-ikincil);
+  }
+
+  .proje__ozellikler li + li {
+    margin-top: 0.35rem;
+  }
+
+  /* Teknoloji etiketleri: hap şeklinde küçük kutular */
+  .etiketler {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 1.75rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .etiketler li {
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--cizgi);
+    border-radius: 999px;
+    background: var(--nane);
+    font-family: var(--font-kod);
+    font-size: 0.8rem;
+  }
+
+  /* Demo kartları */
+  .demolar-baslik {
+    margin: 4rem 0 1.5rem;
+    font-size: 1.35rem;
+  }
+
+  .demolar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .demo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--cizgi);
+    border-radius: 16px;
+    background: var(--beyaz);
+  }
+
+  .demo h4 {
+    margin: 0;
+    font-size: 1.15rem;
+  }
+
+  .demo p {
+    margin: 0;
+    color: var(--yazi-ikincil);
+  }
+
+  .demo .demo__sektor {
+    font-family: var(--font-kod);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--yaprak-koyu);
+  }
+
+  .demo__baglanti,
+  .demo__rozet {
+    align-self: flex-start;
+    margin-top: auto;
+  }
+
+  .demo__baglanti {
+    padding-top: 0.75rem;
+    font-weight: 500;
+  }
+
+  .demo__rozet {
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    background: var(--nane);
+    font-size: 0.85rem;
+    color: var(--yazi-ikincil);
+  }
+</style>

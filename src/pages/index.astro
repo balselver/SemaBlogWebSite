@@ -1,10 +1,12 @@
 ---
-// Ana sayfa: bölümler sırayla; Örnek işler ve İletişim 2B'de eklenecek
+// Ana sayfa: tüm bölümler sırayla
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Header from '../components/Header.astro'
 import Hero from '../sections/Hero.astro'
 import Hizmetler from '../sections/Hizmetler.astro'
+import Portfoy from '../sections/Portfoy.astro'
 import Surec from '../sections/Surec.astro'
+import Iletisim from '../sections/Iletisim.astro'
 import Footer from '../components/Footer.astro'
 ---
 
@@ -14,9 +16,9 @@ import Footer from '../components/Footer.astro'
   <main id="icerik">
     <Hero />
     <Hizmetler />
-    <!-- 2B: <Portfoy /> buraya gelecek -->
+    <Portfoy />
     <Surec />
-    <!-- 2B: <Iletisim /> buraya gelecek -->
+    <Iletisim />
   </main>
 
   <Footer />
