@@ -1,0 +1,82 @@
+---
+// Marka logosu: peteğin yan kenarları kod etiketinin < ve > işaretleri, ortada ssb
+interface Props {
+    // Koyu zemin üzerinde mi kullanılıyor? (renkler açık tonlara döner)
+    koyu?: boolean;
+    // Piksel cinsinden genişlik; yükseklik orana göre hesaplanır
+    genislik?: number;
+}
+
+const { koyu = false, genislik = 120 } = Astro.props;
+
+// viewBox 260×100 olduğu için yükseklik = genişlik × 100 / 260
+const yukseklik = Math.round((genislik * 100) / 260);
+---
+
+<svg
+    class:list={["logo", { "logo--koyu": koyu }]}
+    width={genislik}
+    height={yukseklik}
+    viewBox="0 0 260 100"
+    role="img"
+    aria-label="ssb"
+>
+    <!-- Peteğin silik üst ve alt kenarları -->
+    <path class="logo__kenar" d="M42 6H214M42 94H214" />
+
+    <!-- Peteğin yan kenarları: sol < ve sağ > -->
+    <polyline class="logo__parantez" points="42,6 16,50 42,94" />
+    <polyline class="logo__parantez" points="214,6 240,50 214,94" />
+
+    <!-- Ortadaki baş harfler -->
+    <text class="logo__yazi" x="112" y="67" text-anchor="middle">
+        ssb
+    </text>
+
+    <!-- Kendini kapatan etiketin / işareti -->
+    <line class="logo__egik" x1="196" y1="28" x2="180" y2="72" />
+</svg>
+
+<style>
+    /* Renkler değişkende: koyu sürüm yalnızca değişkenleri değiştirir */
+    .logo {
+        --logo-kenar: var(--silik);
+        --logo-vurgu: var(--yaprak);
+        --logo-yazi: var(--orman);
+        flex-shrink: 0;
+    }
+
+    .logo--koyu {
+        --logo-kenar: #2f6b52;
+        --logo-vurgu: var(--filiz);
+        --logo-yazi: var(--beyaz);
+    }
+
+    .logo__kenar {
+        fill: none;
+        stroke: var(--logo-kenar);
+        stroke-width: 5;
+        stroke-linecap: round;
+    }
+
+    .logo__parantez {
+        fill: none;
+        stroke: var(--logo-vurgu);
+        stroke-width: 9;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .logo__egik {
+        stroke: var(--logo-vurgu);
+        stroke-width: 8;
+        stroke-linecap: round;
+    }
+
+    .logo__yazi {
+        font-family: var(--font-kod);
+        font-size: 50px;
+        font-weight: 700;
+        fill: var(--logo-yazi);
+    }
+</style>
