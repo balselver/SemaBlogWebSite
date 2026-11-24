@@ -1,4 +1,4 @@
-// Sektör demoları: 3. aşamada sayfaları yapıldıkça durum 'yayinda' olacak
+// Sektör demoları: sayfası hazır olanlar 'yayinda'
 export interface Demo {
   sektor: string
   baslik: string
@@ -13,8 +13,8 @@ export const demolar: Demo[] = [
   {
     sektor: 'Lokanta',
     baslik: 'İki dilli QR menü',
-    aciklama: 'Kategorili menü, Türkçe/İngilizce geçiş, fotoğraflı yemek kartları.',
-    durum: 'hazirlaniyor',
+    aciklama: 'Kategorili menü, Türkçe/İngilizce geçiş, tek dokunuşla kategoriye atlama.',
+    durum: 'yayinda',
     adres: '/demolar/qr-menu',
   },
   {
