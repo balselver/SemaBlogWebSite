@@ -1,0 +1,20 @@
+---
+// İki dilli metin: iki <span> üretir, hangisinin görüneceğine kökteki data-dil karar verir
+import type { Metin } from '../../data/demolar/qr-menu'
+
+interface Props {
+  metin: Metin
+}
+
+const { metin } = Astro.props
+---
+
+<span class="iki-dil" lang="tr">{metin.tr}</span><span class="iki-dil" lang="en">{metin.en}</span>
+
+<style>
+  /* <html data-dil="en"> ise Türkçeyi, değilse İngilizceyi gizle */
+  :global(html[data-dil='en']) .iki-dil[lang='tr'],
+  :global(html:not([data-dil='en'])) .iki-dil[lang='en'] {
+    display: none;
+  }
+</style>
