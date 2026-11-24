@@ -1,16 +1,23 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import Header from "../components/Header.astro";
-import Hero from "../sections/Hero.astro";
-import Footer from "../components/Footer.astro";
+// Ana sayfa: bölümler sırayla; Örnek işler ve İletişim 2B'de eklenecek
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Hero from '../sections/Hero.astro'
+import Hizmetler from '../sections/Hizmetler.astro'
+import Surec from '../sections/Surec.astro'
+import Footer from '../components/Footer.astro'
 ---
 
 <BaseLayout>
-	<Header />
+  <Header />
 
-	<main id="icerik">
-		<Hero />
-	</main>
+  <main id="icerik">
+    <Hero />
+    <Hizmetler />
+    <!-- 2B: <Portfoy /> buraya gelecek -->
+    <Surec />
+    <!-- 2B: <Iletisim /> buraya gelecek -->
+  </main>
 
-	<Footer />
+  <Footer />
 </BaseLayout>
