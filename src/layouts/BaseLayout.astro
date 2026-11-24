@@ -1,37 +1,39 @@
 ---
 // Tüm sayfaların ortak iskeleti: <head>, yazı tipleri, global stiller
-import "@fontsource-variable/space-grotesk";
-import "@fontsource-variable/jetbrains-mono";
-import "../styles/global.css";
+import '@fontsource-variable/space-grotesk'
+import '@fontsource-variable/jetbrains-mono'
+import '../styles/global.css'
 
 interface Props {
-    // Sayfa başlığı; verilmezse ana sayfa başlığı kullanılır
-    baslik?: string;
-    // Arama sonuçlarında görünen kısa açıklama
-    aciklama?: string;
+  // Sayfa başlığı; verilmezse ana sayfa başlığı kullanılır
+  baslik?: string
+  // Arama sonuçlarında görünen kısa açıklama
+  aciklama?: string
 }
 
 const {
-    baslik,
-    aciklama = "Kayseri'deki işletmelere hızlı, mobil uyumlu web siteleri.",
-} = Astro.props;
+  baslik,
+  aciklama = "Kayseri'deki işletmelere hızlı, mobil uyumlu web siteleri.",
+} = Astro.props
 
 // Sekme başlığı: ana sayfada marka, diğer sayfalarda "Sayfa | ssb"
-const tamBaslik = baslik ? `${baslik} | ssb` : "ssb · Web Tasarım & Yazılım";
+const tamBaslik = baslik ? `${baslik} | ssb` : 'ssb · Web Tasarım & Yazılım'
 ---
 
 <!doctype html>
 <html lang="tr">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>{tamBaslik}</title>
-        <meta name="description" content={aciklama} />
-        <meta name="theme-color" content="#0F3D2E" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <meta name="generator" content={Astro.generator} />
-    </head>
-    <body>
-        <slot />
-    </body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tamBaslik}</title>
+    <meta name="description" content={aciklama} />
+    <meta name="theme-color" content="#0F3D2E" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <!-- Sayfaya özel <head> etiketleri buraya gelir (ör. demolarda noindex) -->
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
 </html>

@@ -20,8 +20,8 @@ export const demolar: Demo[] = [
   {
     sektor: 'Berber',
     baslik: 'Online randevu',
-    aciklama: 'Hizmet ve saat seçimi, çalışma saatleri, tek dokunuşla arama.',
-    durum: 'hazirlaniyor',
+    aciklama: 'Hizmet, gün ve saat seçimi; dolu saatler kapalı, anında onay.',
+    durum: 'yayinda',
     adres: '/demolar/berber',
   },
   {
