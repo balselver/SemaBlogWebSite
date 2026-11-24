@@ -1,0 +1,469 @@
+---
+// Demo: veteriner kliniği tanıtım sitesi (hayalî işletme)
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import { vetHizmetleri, gunAdlari, vetSaatleri, sss } from '../../data/demolar/veteriner'
+
+// Tablo pazartesiden başlasın: getDay() sırasında 0 = Pazar olduğu için Pazar'ı sona alıyoruz
+const tabloSirasi = [1, 2, 3, 4, 5, 6, 0]
+---
+
+<DemoLayout
+  baslik="Veteriner kliniği demosu"
+  aciklama="Örnek bir veteriner kliniği için tanıtım sayfası: hizmetler, çalışma saatleri, nöbetçi hekim ve sık sorulan sorular."
+>
+  <div class="vet">
+    <header class="vet-vitrin">
+      <div class="vet-kutu vet-vitrin__ic">
+        <div>
+          <p class="vet-vitrin__ust">Veteriner kliniği · Kayseri</p>
+          <h1>Patiköy Veteriner Kliniği</h1>
+          <p class="vet-vitrin__metin">
+            Kediniz, köpeğiniz ya da kuşunuz için muayeneden ameliyata kadar şefkatli ve modern bakım.
+          </p>
+          <!-- JavaScript kapalıysa bu sabit metin görünür; açıksa "Şu an açık/kapalı" yazar -->
+          <p class="durum" data-acik-durum>Pzt–Cum 09:00–19:00 · Cmt 10:00–17:00</p>
+          <div class="vet-butonlar">
+            <a class="v-buton" href="#hizmetler">Hizmetlerimiz</a>
+            <a class="v-buton v-buton--ikincil" href="#saatler">Çalışma saatleri</a>
+          </div>
+        </div>
+
+        <aside class="acil" aria-labelledby="acil-baslik">
+          <h2 id="acil-baslik">Acil durum mu?</h2>
+          <p>Nöbetçi hekimimize kapalı olduğumuz saatlerde de 7/24 ulaşabilirsiniz.</p>
+          <p class="acil__hat">Acil hat: <span>0 (352) XXX XX XX</span></p>
+          <p class="acil__not">Demo: numara gerçek değil.</p>
+        </aside>
+      </div>
+    </header>
+
+    <section id="hizmetler" class="vet-bolum" aria-labelledby="vet-hizmetler-baslik">
+      <div class="vet-kutu">
+        <h2 id="vet-hizmetler-baslik">Hizmetlerimiz</h2>
+        <ul class="vet-hizmetler">
+          {vetHizmetleri.map((hizmet) => (
+            <li class="vet-hizmet">
+              <h3>{hizmet.baslik}</h3>
+              <p>{hizmet.aciklama}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section id="saatler" class="vet-bolum vet-bolum--beyaz" aria-labelledby="saatler-baslik">
+      <div class="vet-kutu vet-iki">
+        <div>
+          <h2 id="saatler-baslik">Çalışma saatleri</h2>
+          <table class="saat-tablosu">
+            <caption class="gorunmez">Haftalık çalışma saatleri</caption>
+            <tbody>
+              {tabloSirasi.map((gunNo) => {
+                const aralik = vetSaatleri[gunNo]
+                return (
+                  <tr data-gun={gunNo}>
+                    <th scope="row">{gunAdlari[gunNo]}</th>
+                    <td>{aralik ? `${aralik.acilis}–${aralik.kapanis}` : 'Kapalı (nöbetçi hekim)'}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <h2>Adres</h2>
+          <address class="adres">
+            Örnek Mah. Demo Cad. No: 12<br />
+            Melikgazi, Kayseri
+          </address>
+          <p class="vet-soluk">Kliniğin önünde ücretsiz otopark vardır.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="vet-bolum" aria-labelledby="sss-baslik">
+      <div class="vet-kutu vet-dar">
+        <h2 id="sss-baslik">Sık sorulan sorular</h2>
+        <div class="sss">
+          {sss.map((madde) => (
+            <details class="sss__madde">
+              <summary>{madde.soru}</summary>
+              <p>{madde.cevap}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
+</DemoLayout>
+
+<style>
+  /* Demo kliniğin kendi teması: açık mavi, güven veren ve sakin */
+  .vet {
+    --v-zemin: #F4F8FB;
+    --v-beyaz: #FFFFFF;
+    --v-ana: #1D5C8C;
+    --v-ana-koyu: #15476D;
+    --v-vurgu: #F2A541;
+    --v-yazi: #14273A;
+    --v-soluk: #4A6075;
+    --v-cizgi: #D9E4EE;
+    background: var(--v-zemin);
+    color: var(--v-yazi);
+  }
+
+  .vet-kutu {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding-inline: 1.25rem;
+  }
+
+  .vet-dar {
+    max-width: 760px;
+  }
+
+  /* Vitrin: metin solda, acil kutusu sağda */
+  .vet-vitrin {
+    padding: 4rem 0;
+    border-bottom: 1px solid var(--v-cizgi);
+  }
+
+  .vet-vitrin__ic {
+    display: grid;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 900px) {
+    .vet-vitrin__ic {
+      grid-template-columns: 1.4fr 1fr;
+    }
+  }
+
+  .vet-vitrin__ust {
+    margin: 0 0 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--v-ana);
+  }
+
+  .vet-vitrin h1 {
+    margin: 0 0 1rem;
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    color: var(--v-ana-koyu);
+  }
+
+  .vet-vitrin__metin {
+    max-width: 48ch;
+    font-size: 1.15rem;
+    color: var(--v-soluk);
+  }
+
+  /* "Şu an açık / kapalı" rozeti: rengi data-durum özelliğine göre değişir */
+  .durum {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 1.75rem;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--v-cizgi);
+    border-radius: 999px;
+    background: var(--v-beyaz);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .durum::before {
+    content: '';
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: var(--v-soluk);
+  }
+
+  .durum[data-durum='acik'] {
+    border-color: #BFE3CC;
+    background: #E3F4EA;
+    color: #17663A;
+  }
+
+  .durum[data-durum='acik']::before {
+    background: #22A55A;
+  }
+
+  .durum[data-durum='kapali'] {
+    border-color: #F2C9C2;
+    background: #FBEAE7;
+    color: #9A2B1F;
+  }
+
+  .durum[data-durum='kapali']::before {
+    background: #D2483A;
+  }
+
+  .vet-butonlar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .v-buton {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0.75rem 1.4rem;
+    border: 2px solid var(--v-ana);
+    border-radius: 12px;
+    background: var(--v-ana);
+    color: #FFFFFF;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .v-buton:hover {
+    border-color: var(--v-ana-koyu);
+    background: var(--v-ana-koyu);
+  }
+
+  .v-buton--ikincil {
+    background: transparent;
+    color: var(--v-ana);
+  }
+
+  .v-buton--ikincil:hover {
+    background: var(--v-ana);
+    color: #FFFFFF;
+  }
+
+  .v-buton:focus-visible {
+    outline-color: var(--v-ana);
+  }
+
+  /* Acil kutusu */
+  .acil {
+    padding: 1.75rem;
+    border-radius: 16px;
+    background: var(--v-ana-koyu);
+    color: #E6EEF5;
+  }
+
+  .acil h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.35rem;
+    color: #FFFFFF;
+  }
+
+  .acil p {
+    margin: 0 0 0.75rem;
+  }
+
+  .acil__hat {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+
+  .acil__hat span {
+    color: var(--v-vurgu);
+  }
+
+  .acil .acil__not {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #B8CCDD;
+  }
+
+  /* Bölümler */
+  .vet-bolum {
+    padding: 4rem 0;
+  }
+
+  .vet-bolum--beyaz {
+    background: var(--v-beyaz);
+  }
+
+  .vet-bolum h2 {
+    margin: 0 0 1.5rem;
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    color: var(--v-ana-koyu);
+  }
+
+  .vet-hizmetler {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .vet-hizmet {
+    padding: 1.5rem;
+    border: 1px solid var(--v-cizgi);
+    border-top: 4px solid var(--v-vurgu);
+    border-radius: 12px;
+    background: var(--v-beyaz);
+  }
+
+  .vet-hizmet h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.15rem;
+  }
+
+  .vet-hizmet p {
+    margin: 0;
+    color: var(--v-soluk);
+  }
+
+  /* Saatler ve adres: geniş ekranda yan yana */
+  .vet-iki {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .vet-iki {
+      grid-template-columns: 1.3fr 1fr;
+    }
+  }
+
+  .saat-tablosu {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .saat-tablosu th,
+  .saat-tablosu td {
+    padding: 0.7rem 0.75rem;
+    border-bottom: 1px solid var(--v-cizgi);
+    text-align: left;
+  }
+
+  .saat-tablosu th {
+    font-weight: 500;
+  }
+
+  .saat-tablosu td {
+    text-align: right;
+    color: var(--v-soluk);
+  }
+
+  /* Bugünün satırı (JavaScript işaretler) */
+  .saat-tablosu tr[aria-current='date'] {
+    background: #EAF2F9;
+  }
+
+  .saat-tablosu tr[aria-current='date'] th,
+  .saat-tablosu tr[aria-current='date'] td {
+    font-weight: 700;
+    color: var(--v-ana-koyu);
+  }
+
+  .adres {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-style: normal;
+    line-height: 1.6;
+  }
+
+  .vet-soluk {
+    color: var(--v-soluk);
+  }
+
+  /* Sık sorulan sorular: <details> tarayıcının kendi aç/kapa öğesi */
+  .sss {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .sss__madde {
+    border: 1px solid var(--v-cizgi);
+    border-radius: 12px;
+    background: var(--v-beyaz);
+  }
+
+  .sss__madde summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 44px;
+    padding: 1rem 1.25rem;
+    font-weight: 500;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  /* Tarayıcının varsayılan üçgenini gizle, yerine + / − koy */
+  .sss__madde summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .sss__madde summary::after {
+    content: '+';
+    content: '+' / '';
+    font-size: 1.4rem;
+    line-height: 1;
+    color: var(--v-ana);
+  }
+
+  .sss__madde[open] summary::after {
+    content: '−';
+    content: '−' / '';
+  }
+
+  .sss__madde summary:focus-visible {
+    outline-color: var(--v-ana);
+  }
+
+  .sss__madde p {
+    margin: 0;
+    padding: 0 1.25rem 1.25rem;
+    color: var(--v-soluk);
+  }
+</style>
+
+<script>
+  // "Şu an açık mı?" rozeti ve bugünün satırı: ziyaret anına göre tarayıcıda hesaplanır
+  import { gunAdlari, vetSaatleri } from '../../data/demolar/veteriner'
+
+  // "09:30" → 570 (gece yarısından itibaren geçen dakika)
+  const dakikaya = (saat: string) => {
+    const [s, d] = saat.split(':').map(Number)
+    return s * 60 + d
+  }
+
+  const simdi = new Date()
+  const bugunNo = simdi.getDay()
+  const suan = simdi.getHours() * 60 + simdi.getMinutes()
+
+  // Tablodaki bugünün satırını işaretle
+  document.querySelector(`[data-gun="${bugunNo}"]`)?.setAttribute('aria-current', 'date')
+
+  const rozet = document.querySelector<HTMLElement>('[data-acik-durum]')
+
+  if (rozet) {
+    const bugun = vetSaatleri[bugunNo]
+
+    if (bugun && suan >= dakikaya(bugun.acilis) && suan < dakikaya(bugun.kapanis)) {
+      rozet.textContent = `Şu an açık · Kapanış ${bugun.kapanis}`
+      rozet.dataset.durum = 'acik'
+    } else {
+      // Bir sonraki açılışı bul: bugün (henüz açılmadıysa) ya da sonraki günler
+      for (let i = 0; i < 7; i++) {
+        const gunNo = (bugunNo + i) % 7
+        const aralik = vetSaatleri[gunNo]
+        if (!aralik) continue
+        if (i === 0 && suan >= dakikaya(aralik.acilis)) continue
+
+        const ne = i === 0 ? 'bugün' : i === 1 ? 'yarın' : gunAdlari[gunNo]
+        rozet.textContent = `Şu an kapalı · Açılış ${ne} ${aralik.acilis}`
+        break
+      }
+      rozet.dataset.durum = 'kapali'
+    }
+  }
+</script>

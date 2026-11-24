@@ -27,8 +27,8 @@ export const demolar: Demo[] = [
   {
     sektor: 'Veteriner',
     baslik: 'Klinik tanıtım sitesi',
-    aciklama: 'Hizmetler, acil hat, yol tarifi ve çalışma saatleri tek sayfada.',
-    durum: 'hazirlaniyor',
+    aciklama: 'Hizmetler, anlık açık/kapalı durumu, çalışma saatleri ve sık sorulan sorular.',
+    durum: 'yayinda',
     adres: '/demolar/veteriner',
   },
 ]
