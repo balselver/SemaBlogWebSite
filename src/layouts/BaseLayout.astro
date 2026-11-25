@@ -27,7 +27,11 @@ const kanonik = new URL(Astro.url.pathname, Astro.site).href
 
 // Paylaşım görseli mutlak adres olmalı: /og-gorsel.png → https://.../og-gorsel.png
 const gorselAdresi = new URL(gorsel, Astro.site).href
+
+// Google Search Console sahiplik doğrulaması: kodu Search Console'daki HTML etiketinden kopyalayın
+const googleDogrulama = '1tqH9Y6snGaakRilhKN2LAG1rDqqm28847cpxBR3k8k'
 ---
+
 
 <!doctype html>
 <html lang="tr">
@@ -37,6 +41,7 @@ const gorselAdresi = new URL(gorsel, Astro.site).href
     <title>{tamBaslik}</title>
     <meta name="description" content={aciklama} />
     <link rel="canonical" href={kanonik} />    
+    <meta name="google-site-verification" content={googleDogrulama} />
     <meta name="theme-color" content="#0F3D2E" />
     
     <!-- Simgeler ve site haritası -->
