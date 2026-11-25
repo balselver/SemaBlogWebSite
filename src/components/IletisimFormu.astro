@@ -1,0 +1,196 @@
+---
+// İletişim formu: mesajı Web3Forms servisi üzerinden e-postanıza iletir (sunucu gerekmez)
+import { PUBLIC_WEB3FORMS_KEY } from 'astro:env/client'
+
+const siteTurleri = ['Tanıtım sitesi', 'QR menü', 'Online randevu', 'Özel yazılım / panel', 'Henüz bilmiyorum']
+---
+
+<form class="form" action="https://api.web3forms.com/submit" method="POST" data-iletisim-formu>
+  <!-- Servis ayarları: ziyaretçi görmez -->
+  <input type="hidden" name="access_key" value={PUBLIC_WEB3FORMS_KEY} />
+  <input type="hidden" name="subject" value="ssb sitesinden yeni teklif talebi" />
+  <input type="hidden" name="from_name" value="ssb web sitesi" />
+
+  <!-- Bal tuzağı: insanlar görmez, spam botları doldurur; doluysa servis mesajı atar -->
+  <input type="checkbox" name="botcheck" class="form__tuzak" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+  <p class="form__not">* ile işaretli alanlar zorunludur.</p>
+
+  <div class="form__ikili">
+    <label class="alan">
+      <span>Adınız *</span>
+      <input type="text" name="ad" autocomplete="name" required maxlength="80" />
+    </label>
+    <label class="alan">
+      <span>E-posta adresiniz *</span>
+      <input type="email" name="email" autocomplete="email" required maxlength="120" />
+    </label>
+  </div>
+
+  <div class="form__ikili">
+    <label class="alan">
+      <span>İşletmenizin adı</span>
+      <input type="text" name="isletme" autocomplete="organization" maxlength="120" />
+    </label>
+    <label class="alan">
+      <span>Ne tür bir site?</span>
+      <select name="site_turu">
+        {siteTurleri.map((tur) => <option>{tur}</option>)}
+      </select>
+    </label>
+  </div>
+
+  <label class="alan">
+    <span>Mesajınız *</span>
+    <textarea name="mesaj" rows="5" required maxlength="2000"></textarea>
+  </label>
+
+  <label class="onay">
+    <input type="checkbox" name="kvkk_onay" value="Evet" required />
+    <span>
+      Mesajımın iletilmesi için kişisel verilerimin yurt dışındaki form servisine aktarılmasına açık rıza
+      veriyorum. <a href="/kvkk" target="_blank">Aydınlatma metni</a> *
+    </span>
+  </label>
+
+  <button class="buton buton--birincil" type="submit" data-gonder>Mesajı gönder</button>
+  <p class="form__durum" role="status" data-form-durum></p>
+</form>
+
+<style>
+  .form {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .form__ikili {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 1.25rem;
+  }
+
+  .form__not {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--yazi-ikincil);
+  }
+
+  .alan {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .alan input,
+  .alan select,
+  .alan textarea {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.65rem 0.875rem;
+    border: 1px solid var(--cizgi);
+    border-radius: 10px;
+    background: var(--beyaz);
+    color: var(--yazi);
+    font: inherit;
+    font-weight: 400;
+  }
+
+  .alan textarea {
+    min-height: 140px;
+    resize: vertical;
+  }
+
+  .alan input:focus-visible,
+  .alan select:focus-visible,
+  .alan textarea:focus-visible {
+    outline: 3px solid var(--yaprak);
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+
+  /* Onay kutusu: metin uzun olduğu için kutu üstte hizalı */
+  .onay {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--yazi-ikincil);
+  }
+
+  .onay input {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin-top: 0.15rem;
+    accent-color: var(--yaprak-koyu);
+  }
+
+  .form__tuzak {
+    display: none;
+  }
+
+  .form .buton {
+    justify-self: start;
+  }
+
+  .form .buton:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  /* Sonuç mesajı: boşken de yer kaplar, sayfa zıplamaz */
+  .form__durum {
+    min-height: 1.5em;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .form__durum[data-tur='basarili'] {
+    color: var(--yaprak-koyu);
+  }
+
+  .form__durum[data-tur='hata'] {
+    color: #A4262C;
+  }
+</style>
+
+<script>
+  // Formu sayfadan ayrılmadan gönder, sonucu formun altında göster
+  const form = document.querySelector<HTMLFormElement>('[data-iletisim-formu]')
+  const dugme = document.querySelector<HTMLButtonElement>('[data-gonder]')
+  const durum = document.querySelector<HTMLElement>('[data-form-durum]')
+
+  if (form && dugme && durum) {
+    form.addEventListener('submit', async (olay) => {
+      olay.preventDefault()
+
+      dugme.disabled = true
+      dugme.textContent = 'Gönderiliyor…'
+      durum.textContent = ''
+      durum.dataset.tur = ''
+
+      try {
+        const veri = Object.fromEntries(new FormData(form))
+        const cevap = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(veri),
+        })
+        const sonuc = await cevap.json()
+
+        if (!cevap.ok || !sonuc.success) throw new Error(sonuc.message)
+
+        form.reset()
+        durum.textContent = 'Teşekkürler! Mesajınız ulaştı, en kısa sürede e-postayla dönüş yapacağım.'
+        durum.dataset.tur = 'basarili'
+      } catch {
+        durum.textContent = 'Mesaj gönderilemedi. Lütfen biraz sonra tekrar deneyin ya da doğrudan e-posta gönderin.'
+        durum.dataset.tur = 'hata'
+      } finally {
+        dugme.disabled = false
+        dugme.textContent = 'Mesajı gönder'
+      }
+    })
+  }
+</script>

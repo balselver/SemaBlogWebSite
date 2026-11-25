@@ -1,0 +1,119 @@
+---
+// KVKK aydınlatma metni: iletişim formunda toplanan kişisel veriler için
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import { iletisim } from '../data/iletisim'
+
+// Metnin son güncellenme tarihi: içerik değişince bunu da güncelleyin
+const guncelleme = '24 Kasım 2026'
+---
+
+<BaseLayout
+  baslik="KVKK aydınlatma metni"
+  aciklama="İletişim formu aracılığıyla toplanan kişisel verilere ilişkin aydınlatma metni."
+>
+  <Header />
+
+  <main id="icerik" class="kapsayici metin-sayfa">
+    <h1>Kişisel verilerin korunması aydınlatma metni</h1>
+    <p class="metin-sayfa__tarih">Son güncelleme: {guncelleme}</p>
+
+    <h2>1. Veri sorumlusu</h2>
+    <p>
+      Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu'nun ("KVKK") 10. maddesi uyarınca veri sorumlusu
+      sıfatıyla Sema Bal ("ssb") tarafından hazırlanmıştır. İletişim:
+      <a href={`mailto:${iletisim.eposta}`}>{iletisim.eposta}</a>
+    </p>
+
+    <h2>2. İşlenen kişisel veriler</h2>
+    <ul>
+      <li>Kimlik: adınız</li>
+      <li>İletişim: e-posta adresiniz</li>
+      <li>Talep bilgileri: işletme adınız (isteğe bağlı), istediğiniz site türü ve mesajınızın içeriği</li>
+      <li>Onay kaydı: formdaki açık rıza kutusunu işaretlediğiniz bilgisi</li>
+    </ul>
+
+    <h2>3. İşleme amaçları</h2>
+    <ul>
+      <li>Teklif ve bilgi taleplerinize dönüş yapmak</li>
+      <li>Talep ettiğiniz hizmete ilişkin görüşme yürütmek ve teklif hazırlamak</li>
+    </ul>
+    <p>Verileriniz pazarlama, reklam ya da bülten gönderimi amacıyla kullanılmaz.</p>
+
+    <h2>4. Hukuki sebepler</h2>
+    <p>
+      Verileriniz KVKK'nın 5. maddesinin 2. fıkrasındaki (c) bir sözleşmenin kurulmasıyla doğrudan ilgili olması ve
+      (f) veri sorumlusunun meşru menfaati hukuki sebeplerine dayanılarak işlenir. Yurt dışına aktarım, KVKK'nın 9.
+      maddesi kapsamında formda verdiğiniz açık rızaya dayanır.
+    </p>
+
+    <h2>5. Aktarım</h2>
+    <p>
+      Form mesajları, e-postaya iletilmek üzere Web3Forms form servisine; e-posta hesabının sağlayıcısı Google'a
+      (Gmail) aktarılır. Bu hizmetlerin sunucuları yurt dışında bulunmaktadır. Verileriniz bunlar dışında hiçbir
+      üçüncü kişiyle paylaşılmaz.
+    </p>
+
+    <h2>6. Toplama yöntemi</h2>
+    <p>Verileriniz, bu sitedeki iletişim formu aracılığıyla elektronik ortamda toplanır.</p>
+
+    <h2>7. Saklama süresi</h2>
+    <p>
+      Verileriniz talebinize dönüş yapılması ve varsa kurulan iş ilişkisi süresince saklanır. İş ilişkisi
+      kurulmazsa en geç bir yıl içinde silinir.
+    </p>
+
+    <h2>8. Haklarınız</h2>
+    <p>KVKK'nın 11. maddesi uyarınca şu haklara sahipsiniz:</p>
+    <ul>
+      <li>Kişisel verilerinizin işlenip işlenmediğini öğrenme ve işlenmişse buna ilişkin bilgi talep etme</li>
+      <li>İşlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme</li>
+      <li>Yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme</li>
+      <li>Eksik veya yanlış işlenmişse düzeltilmesini isteme</li>
+      <li>KVKK'nın 7. maddesindeki şartlar çerçevesinde silinmesini veya yok edilmesini isteme</li>
+      <li>Düzeltme ve silme işlemlerinin, verilerin aktarıldığı üçüncü kişilere bildirilmesini isteme</li>
+      <li>Yalnızca otomatik sistemlerle analiz edilmesi sonucu aleyhinize bir sonuç çıkmasına itiraz etme</li>
+      <li>Kanuna aykırı işleme nedeniyle zarara uğramanız hâlinde zararın giderilmesini talep etme</li>
+    </ul>
+
+    <h2>9. Başvuru</h2>
+    <p>
+      Haklarınıza ilişkin taleplerinizi <a href={`mailto:${iletisim.eposta}`}>{iletisim.eposta}</a> adresine
+      iletebilirsiniz. Başvurunuz en geç 30 gün içinde ücretsiz olarak sonuçlandırılır.
+    </p>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* Uzun metin sayfası: okunaklı satır genişliği */
+  .metin-sayfa {
+    max-width: 760px;
+    padding-block: 3.5rem 5rem;
+  }
+
+  .metin-sayfa h1 {
+    font-size: clamp(1.9rem, 4vw, 2.5rem);
+  }
+
+  .metin-sayfa h2 {
+    margin-top: 2.25rem;
+    font-size: 1.3rem;
+  }
+
+  .metin-sayfa__tarih {
+    font-family: var(--font-kod);
+    font-size: 0.85rem;
+    color: var(--yazi-ikincil);
+  }
+
+  .metin-sayfa ul {
+    padding-left: 1.25rem;
+  }
+
+  .metin-sayfa li + li {
+    margin-top: 0.35rem;
+  }
+</style>

@@ -1,0 +1,324 @@
+---
+// Demo: iki dilli QR menü (hayalî lokanta, fiyatlar örnek)
+import DemoLayout from '../../layouts/DemoLayout.astro'
+import { kategoriler, etiketAdlari } from '../../data/demolar/qr-menu'
+import IkiDil from '../../components/demo/IkiDil.astro';
+
+// Fiyatı Türk lirası biçiminde yaz: 320 → ₺320
+const para = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 })
+---
+
+<DemoLayout
+  baslik="QR menü demosu"
+  aciklama="Örnek bir lokanta için iki dilli QR menü: kategoriler, Türkçe/İngilizce geçiş."
+>
+  <div class="menu">
+    <header class="menu-ust">
+      <div class="menu-kutu menu-ust__ic">
+        <div>
+          <p class="menu-ust__alt"><IkiDil metin={{ tr: 'Kayseri mutfağı', en: 'Kayseri cuisine' }} /></p>
+          <h1>Kervan Sofrası</h1>
+        </div>
+        <div class="dil" role="group" aria-label="Dil seçimi / Language">
+          <button type="button" data-dil-secim="tr" aria-pressed="true">TR</button>
+          <button type="button" data-dil-secim="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Kaydırırken üstte kalan kategori çubuğu -->
+    <nav class="kategoriler" aria-label="Kategoriler">
+      <div class="menu-kutu kategoriler__ic">
+        {kategoriler.map((kategori) => (
+          <a href={`#${kategori.id}`}><IkiDil metin={kategori.ad} /></a>
+        ))}
+      </div>
+    </nav>
+
+    <div class="menu-kutu menu-icerik">
+      {kategoriler.map((kategori) => (
+        <section class="kategori" id={kategori.id} aria-labelledby={`${kategori.id}-baslik`}>
+          <h2 id={`${kategori.id}-baslik`}><IkiDil metin={kategori.ad} /></h2>
+          <ul class="urunler">
+            {kategori.urunler.map((urun) => (
+              <li class="urun">
+                <div class="urun__satir">
+                  <h3><IkiDil metin={urun.ad} /></h3>
+                  <span class="urun__cizgi" aria-hidden="true"></span>
+                  <p class="urun__fiyat">{para.format(urun.fiyat)}</p>
+                </div>
+                <p class="urun__aciklama"><IkiDil metin={urun.aciklama} /></p>
+                {urun.etiketler && (
+                  <ul class="urun__etiketler">
+                    {urun.etiketler.map((etiket) => (
+                      <li class={`etiket etiket--${etiket}`}><IkiDil metin={etiketAdlari[etiket]} /></li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      <p class="menu-not">
+        <IkiDil
+          metin={{
+            tr: 'Fiyatlara KDV dahildir. Alerjiniz varsa lütfen garsonumuza bildirin.',
+            en: 'Prices include VAT. Please tell your server about any allergies.',
+          }}
+        />
+      </p>
+    </div>
+  </div>
+</DemoLayout>
+
+<style>
+  /* Demo lokantanın kendi teması: sıcak krem ve kahve */
+  .menu {
+    --m-krem: #FBF6EE;
+    --m-kahve: #3B2417;
+    --m-ikincil: #7A5A48;
+    --m-kirmizi: #B23A2B;
+    --m-cizgi: #E8DCCB;
+    --m-beyaz: #FFFFFF;
+    min-height: 100vh;
+    background: var(--m-krem);
+    color: var(--m-kahve);
+  }
+
+  /* Menü telefonda okunur: geniş ekranda da dar bir sütun */
+  .menu-kutu {
+    max-width: 720px;
+    margin: 0 auto;
+    padding-inline: 1.25rem;
+  }
+
+  .menu-ust {
+    padding: 2.5rem 0 1.5rem;
+  }
+
+  .menu-ust__ic {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .menu-ust__alt {
+    margin: 0 0 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--m-kirmizi);
+  }
+
+  .menu-ust h1 {
+    margin: 0;
+    font-size: clamp(2rem, 8vw, 2.75rem);
+  }
+
+  /* TR / EN düğme grubu */
+  .dil {
+    display: flex;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 1px solid var(--m-cizgi);
+    border-radius: 999px;
+    background: var(--m-beyaz);
+  }
+
+  .dil button {
+    min-width: 48px;
+    min-height: 44px;
+    padding: 0 0.75rem;
+    border: 0;
+    background: transparent;
+    color: var(--m-ikincil);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .dil button[aria-pressed='true'] {
+    background: var(--m-kirmizi);
+    color: var(--m-beyaz);
+  }
+
+  .dil button:focus-visible {
+    outline-color: var(--m-kirmizi);
+    outline-offset: -3px;
+  }
+
+  /* Kategori çubuğu: üstte yapışık, telefonda yana kaydırılır */
+  .kategoriler {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: rgb(251 246 238 / 0.95);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--m-cizgi);
+  }
+
+  .kategoriler__ic {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-block: 0.75rem;
+    scrollbar-width: none;
+  }
+
+  .kategoriler a {
+    flex-shrink: 0;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--m-cizgi);
+    border-radius: 999px;
+    background: var(--m-beyaz);
+    color: var(--m-kahve);
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .kategoriler a:hover {
+    border-color: var(--m-kirmizi);
+    color: var(--m-kirmizi);
+  }
+
+  .kategoriler a:focus-visible {
+    outline-color: var(--m-kirmizi);
+  }
+
+  .menu-icerik {
+    padding-bottom: 4rem;
+  }
+
+  /* Kategori çubuğunun altında kalmasın */
+  .kategori {
+    padding-top: 2.25rem;
+    scroll-margin-top: 4.5rem;
+  }
+
+  .kategori h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.5rem;
+  }
+
+  .urunler {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .urun {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--m-cizgi);
+  }
+
+  /* Ad ........ fiyat: aradaki noktalı çizgi boşluğu doldurur */
+  .urun__satir {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .urun h3 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .urun__cizgi {
+    flex: 1;
+    min-width: 1.5rem;
+    border-bottom: 2px dotted var(--m-cizgi);
+    transform: translateY(-0.25rem);
+  }
+
+  .urun__fiyat {
+    margin: 0;
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--m-kirmizi);
+  }
+
+  .urun__aciklama {
+    margin: 0.25rem 0 0;
+    font-size: 0.95rem;
+    color: var(--m-ikincil);
+  }
+
+  .urun__etiketler {
+    display: flex;
+    gap: 0.4rem;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .etiket {
+    padding: 0.1rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .etiket--aci {
+    background: #F8E1DD;
+    color: #8E2A1E;
+  }
+
+  .etiket--vejetaryen {
+    background: #E2EFDF;
+    color: #2F5E2A;
+  }
+
+  .menu-not {
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: var(--m-ikincil);
+  }
+</style>
+
+<script>
+  // Dil seçimi: kökteki data-dil özelliği hangi <span lang> öğesinin görüneceğini belirler
+  type Dil = 'tr' | 'en'
+
+  const kok = document.documentElement
+  const dugmeler = document.querySelectorAll<HTMLButtonElement>('[data-dil-secim]')
+
+  const dilUygula = (dil: Dil) => {
+    kok.dataset.dil = dil
+    kok.lang = dil
+    dugmeler.forEach((dugme) => {
+      dugme.setAttribute('aria-pressed', String(dugme.dataset.dilSecim === dil))
+    })
+  }
+
+  const dilKaydet = (dil: Dil) => {
+    try {
+      localStorage.setItem('menu-dil', dil)
+    } catch {
+      // Gizli sekmede depolama kapalı olabilir: kaydetmeden devam et
+    }
+  }
+
+  dugmeler.forEach((dugme) => {
+    dugme.addEventListener('click', () => {
+      const dil = dugme.dataset.dilSecim === 'en' ? 'en' : 'tr'
+      dilUygula(dil)
+      dilKaydet(dil)
+    })
+  })
+
+  // Başlangıç dili: adresteki ?dil=en önce gelir (QR kod doğrudan İngilizce açabilir), sonra son seçim
+  const adrestekiDil = new URLSearchParams(location.search).get('dil')
+  let kayitliDil: string | null = null
+  try {
+    kayitliDil = localStorage.getItem('menu-dil')
+  } catch {
+    kayitliDil = null
+  }
+
+  if ((adrestekiDil ?? kayitliDil) === 'en') dilUygula('en')
+</script>
