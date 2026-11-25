@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap'
 export default defineConfig({
   // Sitenin yayındaki adresi: kanonik adres, paylaşım görseli ve site haritası bunu kullanır
   // Alan adı alınınca yalnızca bu satır değişecek
-  site: 'https://ssb-web.balselver.workers.dev',
+   site: 'https://ssbweb.com.tr',
 
   integrations: [
     sitemap({
