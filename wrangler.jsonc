@@ -13,5 +13,9 @@
     "directory": "./dist",
     // Olmayan bir adreste dist/404.html gösterilir ve 404 durum kodu döner
     "not_found_handling": "404-page"
-  }
+  },
+
+  // PR önizlemeleri: master dışındaki dallar için ayrı önizleme adresi oluşturulur
+  // Boş bırakılır; assets ve diğer ayarlar yukarıdakilerle aynı kalır
+  "previews": {},
 }
