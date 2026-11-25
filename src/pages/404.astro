@@ -1,0 +1,65 @@
+---
+// 404 sayfası: sitede olmayan bir adrese girilince gösterilir
+// Cloudflare, wrangler.jsonc'deki not_found_handling ayarıyla bu sayfayı kullanır
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+---
+
+<BaseLayout baslik="Sayfa bulunamadı" aciklama="Aradığınız sayfa bulunamadı.">
+  <!-- Hata sayfası arama sonuçlarında çıkmasın -->
+  <meta slot="head" name="robots" content="noindex" />
+
+  <Header />
+
+  <main id="icerik" class="kapsayici bulunamadi">
+    <!-- Logodaki kod etiketi diliyle: ekran okuyucu bunu okumasın, başlık yeterli -->
+    <p class="bulunamadi__kod" aria-hidden="true">&lt;404 /&gt;</p>
+    <h1>Bu sayfa bulunamadı</h1>
+    <p class="bulunamadi__aciklama">
+      Adres yanlış yazılmış ya da sayfa kaldırılmış olabilir.
+    </p>
+    <div class="bulunamadi__butonlar">
+      <a class="buton buton--birincil" href="/">Ana sayfaya dön</a>
+      <a class="buton buton--ikincil" href="/#iletisim">İletişime geç</a>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .bulunamadi {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-block: 5rem 6rem;
+  }
+
+  .bulunamadi__kod {
+    margin: 0;
+    font-family: var(--font-kod);
+    font-size: clamp(3rem, 10vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--yaprak);
+  }
+
+  .bulunamadi h1 {
+    margin: 0;
+  }
+
+  .bulunamadi__aciklama {
+    max-width: 45ch;
+    margin: 0;
+    color: var(--yazi-ikincil);
+  }
+
+  .bulunamadi__butonlar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+</style>

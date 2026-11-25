@@ -29,3 +29,4 @@ Thumbs.db
 # Yayın servislerinin yerel ayar klasörleri
 .vercel/
 .netlify/
+.wrangler/

@@ -1,0 +1,17 @@
+{
+  // Ayar dosyasının şeması: VS Code otomatik tamamlama ve hata kontrolü yapar
+  "$schema": "./node_modules/wrangler/config-schema.json",
+
+  // Projenin Cloudflare'deki adı; ücretsiz adresin ilk kısmı olur
+  "name": "ssb-web",
+
+  // Cloudflare çalışma ortamının hangi tarihteki davranışını kullanacağımız
+  "compatibility_date": "2026-11-25",
+
+  // Statik site: sunucu kodu yok, yalnızca dist klasöründeki dosyalar yayınlanır
+  "assets": {
+    "directory": "./dist",
+    // Olmayan bir adreste dist/404.html gösterilir ve 404 durum kodu döner
+    "not_found_handling": "404-page"
+  }
+}
