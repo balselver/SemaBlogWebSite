@@ -6,14 +6,19 @@
     "node": ">=22.23.4"
   },
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+  "dev": "astro dev",
+  "build": "astro build",
+  "preview": "astro preview",
+  "astro": "astro",
+  "gorseller": "node scripts/gorseller.mjs"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@fontsource-variable/space-grotesk": "^5.3.0",
     "astro": "^7.4.13"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5"
   }
 }

@@ -9,15 +9,24 @@ interface Props {
   baslik?: string
   // Arama sonuçlarında görünen kısa açıklama
   aciklama?: string
+    // Paylaşım görseli (public klasörüne göre yol); verilmezse genel görsel
+  gorsel?: string
 }
 
 const {
   baslik,
   aciklama = "Kayseri'deki işletmelere hızlı, mobil uyumlu web siteleri.",
+  gorsel = '/og-gorsel.png',
 } = Astro.props
 
 // Sekme başlığı: ana sayfada marka, diğer sayfalarda "Sayfa | ssb"
 const tamBaslik = baslik ? `${baslik} | ssb` : 'ssb · Web Tasarım & Yazılım'
+
+// Kanonik adres: site + sayfa yolu; ?dil=en gibi sorgu parametreleri bilerek dahil edilmez
+const kanonik = new URL(Astro.url.pathname, Astro.site).href
+
+// Paylaşım görseli mutlak adres olmalı: /og-gorsel.png → https://.../og-gorsel.png
+const gorselAdresi = new URL(gorsel, Astro.site).href
 ---
 
 <!doctype html>
@@ -27,8 +36,28 @@ const tamBaslik = baslik ? `${baslik} | ssb` : 'ssb · Web Tasarım & Yazılım'
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{tamBaslik}</title>
     <meta name="description" content={aciklama} />
+    <link rel="canonical" href={kanonik} />    
     <meta name="theme-color" content="#0F3D2E" />
+    
+    <!-- Simgeler ve site haritası -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+
+        <!-- Open Graph: WhatsApp, LinkedIn, Facebook paylaşım kartı -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ssb" />
+    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:title" content={tamBaslik} />
+    <meta property="og:description" content={aciklama} />
+    <meta property="og:url" content={kanonik} />
+    <meta property="og:image" content={gorselAdresi} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ssb logosu: Kayseri'deki işletmelere web sitesi" />
+    <!-- X (Twitter): diğer bilgileri Open Graph'tan okur, yalnızca kart tipi gerekir -->
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="generator" content={Astro.generator} />
     <!-- Sayfaya özel <head> etiketleri buraya gelir (ör. demolarda noindex) -->
     <slot name="head" />
