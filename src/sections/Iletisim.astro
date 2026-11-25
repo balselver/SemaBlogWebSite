@@ -1,9 +1,10 @@
 ---
-// İletişim bölümü: yalnızca e-posta (form 4. aşamada eklenecek)
+// İletişim bölümü: teklif formu + doğrudan e-posta seçeneği
 import BolumBasligi from '../components/BolumBasligi.astro'
+import IletisimFormu from '../components/IletisimFormu.astro'
 import { iletisim } from '../data/iletisim'
 
-// E-posta bağlantısı: müşterinin e-posta uygulaması konu satırı dolu açılır
+// E-posta bağlantısı: konu satırı dolu açılır
 const epostaAdresi = `mailto:${iletisim.eposta}?subject=${encodeURIComponent('Web sitesi teklifi')}`
 ---
 
@@ -14,27 +15,9 @@ const epostaAdresi = `mailto:${iletisim.eposta}?subject=${encodeURIComponent('We
         id="iletisim-baslik"
         etiket="iletişim"
         baslik="Sitenizi konuşalım"
-        aciklama="Teklif almak ücretsiz ve bağlayıcı değil. Bana e-postayla yazın, en kısa sürede dönüş yapayım."
+        aciklama="Teklif almak ücretsiz ve bağlayıcı değil. Formu doldurun, en kısa sürede e-postayla dönüş yapayım."
       />
-
-      <a class="buton buton--birincil iletisim__buton" href={epostaAdresi}>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="3" y="5" width="18" height="14" rx="2" />
-          <path d="m3 7 9 6 9-6" />
-        </svg>
-        E-posta gönderin
-      </a>
-
-      <dl class="iletisim__bilgi">
-        <div>
-          <dt>E-posta</dt>
-          <dd><a href={epostaAdresi}>{iletisim.eposta}</a></dd>
-        </div>
-        <div>
-          <dt>Hizmet bölgesi</dt>
-          <dd>{iletisim.bolge}</dd>
-        </div>
-      </dl>
+      <IletisimFormu />
     </div>
 
     <!-- Müşterinin ilk mesajı kolaylaşsın: ne yazacağını söylüyoruz -->
@@ -45,6 +28,18 @@ const epostaAdresi = `mailto:${iletisim.eposta}?subject=${encodeURIComponent('We
         <li>Sitede olmasını istedikleriniz: menü, randevu, galeri…</li>
         <li>Varsa beğendiğiniz bir sitenin adresi</li>
       </ol>
+
+      <dl class="iletisim__bilgi">
+        <div>
+          <dt>Form yerine e-posta</dt>
+          <dd><a href={epostaAdresi}>{iletisim.eposta}</a></dd>
+        </div>
+        <div>
+          <dt>Hizmet bölgesi</dt>
+          <dd>{iletisim.bolge}</dd>
+        </div>
+      </dl>
+
       <p class="ipucu__not">Genellikle aynı gün dönüş yaparım.</p>
     </aside>
   </div>
@@ -58,20 +53,39 @@ const epostaAdresi = `mailto:${iletisim.eposta}?subject=${encodeURIComponent('We
 
   @media (min-width: 960px) {
     .iletisim {
-      grid-template-columns: 1.2fr 1fr;
+      grid-template-columns: 1.4fr 1fr;
       align-items: start;
     }
   }
 
-  .iletisim__buton {
-    margin-bottom: 2.5rem;
+  .ipucu {
+    padding: 2rem;
+    border: 1px solid var(--cizgi);
+    border-radius: 16px;
+    background: var(--nane);
+  }
+
+  .ipucu h3 {
+    font-size: 1.2rem;
+  }
+
+  .ipucu ol {
+    margin: 0 0 1.75rem;
+    padding-left: 1.25rem;
+    color: var(--yazi-ikincil);
+  }
+
+  .ipucu li + li {
+    margin-top: 0.5rem;
   }
 
   /* Tanım listesi: "E-posta → adres" gibi etiket-değer çiftleri */
   .iletisim__bilgi {
     display: grid;
-    gap: 1.25rem;
-    margin: 0;
+    gap: 1rem;
+    margin: 0 0 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--cizgi);
   }
 
   .iletisim__bilgi div {
@@ -89,32 +103,11 @@ const epostaAdresi = `mailto:${iletisim.eposta}?subject=${encodeURIComponent('We
 
   .iletisim__bilgi dd {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 
   .iletisim__bilgi a {
     color: var(--orman);
-  }
-
-  .ipucu {
-    padding: 2rem;
-    border: 1px solid var(--cizgi);
-    border-radius: 16px;
-    background: var(--nane);
-  }
-
-  .ipucu h3 {
-    font-size: 1.2rem;
-  }
-
-  .ipucu ol {
-    margin: 0 0 1.25rem;
-    padding-left: 1.25rem;
-    color: var(--yazi-ikincil);
-  }
-
-  .ipucu li + li {
-    margin-top: 0.5rem;
   }
 
   .ipucu__not {
